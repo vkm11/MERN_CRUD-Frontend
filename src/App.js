@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import CreateStudent from "./pages/CreateStudent";
 import CreateSchool from "./pages/SchoolMaster"
 import Dashboard from "./pages/Dashboard";
+import CreateUsers from "./pages/Users"
 function App() {
   return (
     <div className="App">
@@ -35,6 +36,7 @@ function App() {
             <Route exact path="/" element={<Dashboard />} />
             <Route exact path="/create-student" element={<CreateStudent />} />
             <Route exact path="/create-school" element={<CreateSchool />} />
+            <Route exact path="/create-user" element={<CreateUsers />} />
           </Routes>
         </div>
       </div>

@@ -3,6 +3,7 @@ import Layout from "../components/Layouts/Layout"
 import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import Pagination from "react-js-pagination";
 
 function CreateStudent() {
     const [userForm, setUserForm] = useState({
@@ -14,6 +15,19 @@ function CreateStudent() {
     const [errors, setErrors] = useState({});
     const [selectedStudent, setSelectedStudent] = useState(null); // New state to hold selected student data
     const [successMessage, setSuccessMessage] = useState("");
+   
+    // pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(5);
+
+    // Logic to calculate the index of the first and last item of the current page
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = usergetForm.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Change page
+    const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+   
     const inputsHandler = (e) => {
         setUserForm((prevNext) => ({
             ...prevNext,
@@ -161,7 +175,7 @@ function CreateStudent() {
             <div className="conatiner-fluid p-2">
                 <div className="form-wrapper card p-2">
                     <div className="">
-                        <p className="h5" style={{ borderBottom: "1px solid red" }}>Student Master</p>
+                        <p className="h5 pb-2" style={{ borderBottom: "1px solid red" }}>Student Master</p>
                     </div>
                     <form>
                         <div className="row">
@@ -216,7 +230,7 @@ function CreateStudent() {
                             </div>
                         )}
                         </div>
-                        <div className="text-end py-2">
+                        <div className="text-end py-0">
                             <button type="submit" onClick={addForm} className="btn btn-primary">
                                 {selectedStudent ? "Update" : "Submit"}
                             </button>
@@ -236,11 +250,10 @@ function CreateStudent() {
                                     <th scope="col" className="text-center">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            {/* <tbody>
                                 {usergetForm.map((user, index) => {
                                     return (
                                         <tr key={index}>
-                                            {/* <th scope="row">{user._id}</th> */}
                                             <td>{index + 1}</td>
                                             <td>{user.name}</td>
                                             <td>{user.email}</td>
@@ -259,8 +272,38 @@ function CreateStudent() {
                                         </tr>
                                     );
                                 })}
+                            </tbody> */}
+                            <tbody>
+                                {currentItems.map((user, index) => (
+                                    <tr key={index}>
+                                        <td>{indexOfFirstItem + index + 1}</td>
+                                            <td>{user.name}</td>
+                                            <td>{user.email}</td>
+                                            <td>{user.rollno}</td>
+                                            <td className="text-center">
+                                                <button
+                                                    className="btn btn-primary btn-sm me-2" onClick={() => updateStudent(user._id)}>
+                                                    <FontAwesomeIcon icon={faPenToSquare} /> Edit
+                                                </button>
+                                                <button
+                                                    className="btn btn-danger btn-sm"
+                                                    onClick={() => deleteStudent(user._id)}>
+                                                    <FontAwesomeIcon icon={faTrashCan} /> Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
+                        <Pagination
+                            activePage={currentPage}
+                            itemsCountPerPage={itemsPerPage}
+                            totalItemsCount={usergetForm.length}
+                            pageRangeDisplayed={3}
+                            onChange={handlePageChange}
+                            itemClass="page-item"
+                            linkClass="page-link"
+                        />
                     </div>
                 </div>
             </div>

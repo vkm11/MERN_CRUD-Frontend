@@ -21,12 +21,48 @@ function Header() {
                             <li className="nav-item">
                                 <NavLink to='/' className="nav-link text-light py-1">Home</NavLink>
                             </li>
-                            <li className="nav-item">
-                                <NavLink to='/create-student' className="nav-link text-light py-1" aria-current="page" >Student</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to='/create-school' className="nav-link text-light py-1" aria-current="page" >School</NavLink>
-                            </li>
+                            {/* <div className="dropdown nav-item">
+                                <a className="btn nav-link text-light dropdown-toggle py-1"  role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                   Masters
+                                </a>
+
+                                <ul className="dropdown-menu">
+                                    <li className="">
+                                        <NavLink to='/create-student' className="text-decoration-none py-1 px-2" aria-current="page" >Student</NavLink>
+                                    </li>
+                                    <li className="">
+                                        <NavLink to='/create-school' className="text-decoration-none py-1 px-2" aria-current="page" >School</NavLink>
+                                    </li>
+                                </ul>
+                            </div> */}
+                            <div className="dropdown nav-item">
+                                <button className="btn nav-link text-light dropdown-toggle py-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Masters
+                                </button>
+
+                                <ul className="dropdown-menu py-0">
+                                    <li>
+                                        <NavLink to='/create-student' className="dropdown-item py-1 px-2" aria-current="page">Student</NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to='/create-school' className="dropdown-item py-1 px-2" aria-current="page">School</NavLink>
+                                    </li>
+                                   
+                                </ul>
+                            </div>
+                            <div className="dropdown nav-item">
+                                <button className="btn nav-link text-light dropdown-toggle py-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    user and management
+                                </button>
+
+                                <ul className="dropdown-menu py-0">
+                                    <li>
+                                        <NavLink to='/create-user' className="dropdown-item py-1 px-2" aria-current="page">User</NavLink>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            
                             {/* <li className="nav-item">
                                 <NavLink to='/register' className="nav-link text-light" >SignUp</NavLink>
                             </li> */}

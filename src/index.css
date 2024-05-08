@@ -8,3 +8,10 @@ ul li a:hover{
   -webkit-transform: scale(1.1); /* Safari 3-8 */
   transform: scale(1.1); 
 }
+.dropdown-menu .dropdown-item{
+  border-radius: 5px;
+
+}
+.dropdown-menu .dropdown-item:active{
+  background: none;
+}

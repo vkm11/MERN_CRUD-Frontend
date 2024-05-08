@@ -13,3 +13,9 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons';
       <h1>Hello World</h1>
       <FontAwesomeIcon icon={faCoffee} />
       </div>
+
+
+## Pagination
+npm install react-js-pagination
+
+import Pagination from "react-js-pagination";
