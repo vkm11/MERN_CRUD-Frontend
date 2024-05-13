@@ -6,6 +6,7 @@ import CreateStudent from "./pages/CreateStudent";
 import CreateSchool from "./pages/SchoolMaster"
 import Dashboard from "./pages/Dashboard";
 import CreateUsers from "./pages/Users"
+import CreateSubject from "./pages/Subject"
 function App() {
   return (
     <div className="App">
@@ -37,6 +38,7 @@ function App() {
             <Route exact path="/create-student" element={<CreateStudent />} />
             <Route exact path="/create-school" element={<CreateSchool />} />
             <Route exact path="/create-user" element={<CreateUsers />} />
+            <Route exact path="/create-subject" element={<CreateSubject />} />
           </Routes>
         </div>
       </div>

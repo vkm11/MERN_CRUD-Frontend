@@ -42,10 +42,13 @@ function Header() {
 
                                 <ul className="dropdown-menu py-0">
                                     <li>
-                                        <NavLink to='/create-student' className="dropdown-item py-1 px-2" aria-current="page">Student</NavLink>
+                                        <NavLink to='/create-student' className="dropdown-item  py-1 px-2" aria-current="page">Student</NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to='/create-school' className="dropdown-item py-1 px-2" aria-current="page">School</NavLink>
+                                        <NavLink to='/create-school' className="dropdown-item  py-1 px-2" aria-current="page">School</NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to='/create-subject' className="dropdown-item  py-1 px-2" aria-current="page">Subject</NavLink>
                                     </li>
                                    
                                 </ul>

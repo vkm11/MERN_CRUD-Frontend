@@ -9,6 +9,9 @@ function Dashboard() {
         alignItems: 'center',
         height: '60vh'
     };
+    const borderStyle = {
+        color: 'red',
+    };
 
     return (
         <Layout>
@@ -18,7 +21,7 @@ function Dashboard() {
                 </div>
                 <div style={containerStyle}>
                     <div className='text-center'>
-                        <h3 style={{ fontSize: "-webkit-xxx-large", fontFamily: "serif" }}>Welcome to Online School</h3>
+                        <h3 style={{ fontSize: "-webkit-xxx-large", fontFamily: "serif", ...borderStyle}}>Welcome to Online School</h3>
                     </div>
                 </div>
             </>
