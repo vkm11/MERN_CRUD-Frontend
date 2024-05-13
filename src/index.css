@@ -15,7 +15,7 @@ ul li a:hover {
   background: none;
   color: #ffffff;
 }
-.form-check-input {
+.form-check-input, .pointer {
   cursor: pointer;
 }
 .headigs{

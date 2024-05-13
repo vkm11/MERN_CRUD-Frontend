@@ -360,7 +360,7 @@ function Users() {
                             <div>
                                 <p className='h6 pb-2 headigs'>Search User Master Group:</p></div>
                             <div className="row">
-                                <div className="col-sm-4 mb-3">
+                                <div className="col-sm-4">
                                     <label>Name</label>
                                     <input
                                         type="text"
@@ -370,7 +370,7 @@ function Users() {
                                         onChange={(e) => setSearchName(e.target.value)}
                                     />
                                 </div>
-                                <div className="col-sm-4 mb-3">
+                                <div className="col-sm-4">
                                     <label>Email</label>
                                     <input
                                         type="text"
@@ -391,7 +391,7 @@ function Users() {
                         <form>
                             <div><p className='h6 pb-2 headigs'>Add New User Master Group:</p></div>
                             <div className="row">
-                                <div className="col-sm-3 mb-3">
+                                <div className="col-sm-3">
                                     <label className="form-label my-0">Name</label><span className="text-danger">*</span>
                                     <input
                                         type="text"
@@ -404,7 +404,7 @@ function Users() {
                                         <div className="text-danger">{errors.name}</div>
                                     )}
                                 </div>
-                                <div className="col-sm-3 mb-3">
+                                <div className="col-sm-3">
                                     <label className="form-label my-0">Mobile number</label><span className="text-danger">*</span>
                                     <input
                                         type="text"
@@ -429,7 +429,7 @@ function Users() {
                                         <div className="text-danger">{errors.caddress}</div>
                                     )}
                                 </div>
-                                <div className='col-sm-3 mb-3'>
+                                <div className='col-sm-3'>
                                     <div className='d-flex justify-content-between'>
                                         <div>
                                             <label className='form-label my-0'> Permanent address </label><span className="text-danger">*</span>
@@ -453,7 +453,7 @@ function Users() {
                                         <div className="text-danger">{errors.paddress}</div>
                                     )}
                                 </div>
-                                <div className="col-sm-3 mb-3">
+                                <div className="col-sm-3">
                                     <label className="form-label my-0">Email-id</label><span className="text-danger">*</span>
                                     <input
                                         type="text"
@@ -466,7 +466,7 @@ function Users() {
                                         <div className="text-danger">{errors.email}</div>
                                     )}
                                 </div>
-                                <div className="col-sm-3 mb-3">
+                                <div className="col-sm-3 ">
                                     <label className="form-label my-0">Information</label><span className="text-danger">*</span>
                                     <input
                                         type="text"
@@ -491,6 +491,7 @@ function Users() {
                                     </select>
                                 </div>)}
                             </div>
+                            <hr />
                             <div>
                                 <p className='h6 pb-2 headigs'>User Login Details:</p>
                                 <div className='row'>
@@ -587,15 +588,15 @@ function Users() {
                                             </td>
 
                                             <td className="text-center">
-                                                <button
-                                                    className="btn btn-primary btn-sm me-2" onClick={() => updateUser(user._id)}>
+                                              <div className="d-flex justify-content-center"> 
+                                                <p className="me-2 my-0 text-primary pointer" onClick={() => updateUser(user._id)}>
                                                     <FontAwesomeIcon icon={faPenToSquare} />
-                                                </button>
-                                                <button
-                                                    className="btn btn-danger btn-sm"
+                                                </p>
+                                                    <p className="my-0 text-danger pointer"
                                                     onClick={() => deleteUser(user._id)}>
                                                     <FontAwesomeIcon icon={faTrashCan} />
-                                                </button>
+                                                </p>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))}
