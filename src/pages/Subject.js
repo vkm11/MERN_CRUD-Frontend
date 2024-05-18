@@ -5,14 +5,27 @@ function Subject() {
     const [userForm, setUserForm] = useState({
         firstName: "",
         lastName: "",
-        status: "",
+        status: "1",
     });
     const [isChecked, setIsChecked] = useState(true);
     const [touchedFields, setTouchedFields] = useState({
         firstName: false,
         lastName: false,
-        status: false
+        status: true
     });
+    const [errors, setErrors] = useState({});
+
+    const validateFirstName = (firstName) => {
+        let error = "";
+        if (!firstName || !firstName.trim()) {
+            error = "First Name is required";
+        } else if (!/^[A-Z]/.test(firstName.trim())) {
+            error = "First Name should start with a capital letter";
+        } else if (/^\s/.test(firstName)) {
+            error = "First Name should not start with a space";
+        }
+        return error;
+    };
 
     const handleFirstNameChange = (e) => {
         const value = e.target.value;
@@ -24,6 +37,11 @@ function Subject() {
         setTouchedFields(prevState => ({
             ...prevState,
             firstName: true
+        }));
+
+        setErrors(prevErrors => ({
+            ...prevErrors,
+            firstName: validateFirstName(value)
         }));
     };
 
@@ -70,16 +88,27 @@ function Subject() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const firstNameError = validateFirstName(userForm.firstName);
+        setErrors(prevErrors => ({
+            ...prevErrors,
+            firstName: firstNameError
+        }));
+
+        if (firstNameError) {
+            return;
+        }
+
         console.log('Form submitted:', userForm);
     };
 
     const isFormValid = () => {
         if (isChecked) {
             return userForm.firstName.trim() !== '' && userForm.status !== '' &&
-                touchedFields.firstName && touchedFields.status;
+                touchedFields.firstName && touchedFields.status && !errors.firstName;
         } else {
             return userForm.firstName.trim() !== '' && userForm.lastName.trim() !== '' && userForm.status !== '' &&
-                touchedFields.firstName && touchedFields.lastName && touchedFields.status;
+                touchedFields.firstName && touchedFields.lastName && touchedFields.status && !errors.firstName;
         }
     };
 
@@ -89,20 +118,19 @@ function Subject() {
                 <form onSubmit={handleSubmit}>
                     <div className='row'>
                         <div className='col-sm-4'>
-                            <label className='form-label'> First Name</label>
+                            <label className='form-label'>First Name</label>
                             <input className='form-control'
                                 type="text"
                                 value={userForm.firstName}
                                 onChange={handleFirstNameChange}
                                 onBlur={() => setTouchedFields(prevState => ({ ...prevState, firstName: true }))}
                             />
-                            {touchedFields.firstName && userForm.firstName.trim() === '' &&
-                                <span className="text-danger">First Name is required</span>}
+                            {errors.firstName && <span className="text-danger">{errors.firstName}</span>}
                         </div>
                         <div className='col-sm-4'>
                             <div className='d-flex justify-content-between align-items-center'>
                                 <div>
-                                    <label className='form-label'> Last Name </label>
+                                    <label className='form-label'>Last Name</label>
                                 </div>
                                 <div>
                                     <input
@@ -110,7 +138,7 @@ function Subject() {
                                         checked={isChecked}
                                         onChange={handleCheckboxChange}
                                     />
-                                    <label className='ps-2'> Same as First Name</label>
+                                    <label className='ps-2'>Same as First Name</label>
                                 </div>
                             </div>
                             <input className='form-control'

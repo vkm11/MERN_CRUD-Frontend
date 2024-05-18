@@ -1,5 +1,6 @@
 ul li a {
   transition: transform 0.5s;
+  width: fit-content;
 }
 
 ul li a:hover {
@@ -11,23 +12,32 @@ ul li a:hover {
 .dropdown-menu .dropdown-item {
   border-radius: 5px;
 }
+.dropdown-menu .dropdown-item:hover {
+  border-bottom: 1px solid red;
+  -ms-transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
 .dropdown-menu .dropdown-item:active {
   background: none;
-  color: #ffffff;
+  margin-left: 1px !important;
+  border-bottom: none;
+  color: black;
 }
-.form-check-input, .pointer {
+.form-check-input,
+.pointer {
   cursor: pointer;
 }
-.headigs{
+.headigs {
   border-bottom: 2px solid red;
   width: fit-content;
 }
-.searchBtn{
+.searchBtn {
   background: linear-gradient(5deg, #ed0b0b, transparent);
   border-radius: 5px;
   color: #ffff;
 }
-.addBtn{
+.addBtn {
   background: linear-gradient(5deg, blue, transparent);
   border-radius: 5px;
   color: #ffff;

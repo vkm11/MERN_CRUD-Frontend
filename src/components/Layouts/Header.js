@@ -5,6 +5,9 @@ function Header() {
     const navBg = {
         background: 'linear-gradient(58deg, #5d203d36, #2a228e)'
     }
+    const navbarIcon ={
+        backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E\")",
+    }
 
     return (
         <>
@@ -13,7 +16,7 @@ function Header() {
                     <Link to='/' className="navbar-brand text-white py-0"> <img src="./images/logo3.png" alt='' width="150px" height="50px" /></Link>
 
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
+                        <span className="navbar-toggler-icon" style={navbarIcon}></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
                         {/* <Link to='/' className="navbar-brand" >    Ecommerce App</Link> */}
@@ -50,6 +53,9 @@ function Header() {
                                     <li>
                                         <NavLink to='/create-subject' className="dropdown-item  py-1 px-2" aria-current="page">Subject</NavLink>
                                     </li>
+                                    <li>
+                                        <NavLink to='/create-section' className="dropdown-item  py-1 px-2" aria-current="page">Section</NavLink>
+                                    </li>
                                    
                                 </ul>
                             </div>
@@ -61,6 +67,9 @@ function Header() {
                                 <ul className="dropdown-menu py-0">
                                     <li>
                                         <NavLink to='/create-user' className="dropdown-item py-1 px-2" aria-current="page">User</NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to='/create-role' className="dropdown-item py-1 px-2" aria-current="page">Role</NavLink>
                                     </li>
                                 </ul>
                             </div>

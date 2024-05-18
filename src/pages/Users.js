@@ -23,6 +23,7 @@ function Users() {
 
     const [searchName, setSearchName] = useState("");
     const [searchEmail, setSearchEmail] = useState("");
+    const [searchStatus, setSearchStatus] = useState("");
     const [searchResult, setSearchResult] = useState([]);
 
     // toggle form 
@@ -323,16 +324,17 @@ function Users() {
     //     setCurrentPage(1); // Reset to the first page after search
     // };
     const handleSearch = () => {
-        if (searchName === "" && searchEmail === "") {
+        if (searchName === "" && searchEmail === "" && searchStatus === "") {
             setSearchResult([]);
             setTimeout(() => {
-                setSearchResult(usergetForm);
+                console.log(setSearchResult(usergetForm));
             }, 1000);
         } else {
             const filteredItems = usergetForm.filter((user) => {
                 return (
                     user.name.toLowerCase().includes(searchName.toLowerCase()) &&
-                    user.email.toLowerCase().includes(searchEmail.toLowerCase())
+                    user.email.toLowerCase().includes(searchEmail.toLowerCase()) &&
+                    String(user.status).toLowerCase().includes(searchStatus.toLowerCase())
                 );
             });
             setSearchResult(filteredItems);
@@ -350,7 +352,7 @@ function Users() {
                             <p className="h5">Users</p>
                         </div>
                         <div>
-                            <button className='searchBtn' onClick={toggleSearchForm} ><FontAwesomeIcon icon={faMagnifyingGlass} /> Search</button>
+                            <button className='searchBtn me-1' onClick={toggleSearchForm} ><FontAwesomeIcon icon={faMagnifyingGlass} /> Search</button>
                             <button className='addBtn' onClick={toggleUserForm} ><FontAwesomeIcon icon={faPlus} /> Add User</button>
                         </div>
                     </div>
@@ -379,6 +381,18 @@ function Users() {
                                         value={searchEmail}
                                         onChange={(e) => setSearchEmail(e.target.value)}
                                     />
+                                </div>
+                                <div className="col-sm-4">
+                                    <label className="form-label my-0">Status</label><span className="text-danger">*</span>
+                                    <select
+                                        className="form-control"
+                                        value={searchStatus}
+                                        onChange={(e) => setSearchStatus(e.target.value)}
+                                    >
+                                        <option value="" disabled>Select status</option>
+                                        <option value="0" className="text-danger">Inactive</option>
+                                        <option value="1" className="text-primary">Active</option>
+                                    </select>
                                 </div>
 
                             </div>
@@ -583,7 +597,7 @@ function Users() {
                                             <td>{user.mob}</td>
                                             <td>
                                                 <div className='text-center'>
-                                                    {user.status === 1 ? <span class="badge rounded-pill text-bg-success">Active</span> : <span class="badge rounded-pill text-bg-danger">Inactive</span>}
+                                                    {user.status === 1 ? <span className="badge rounded-pill text-bg-success">Active</span> : <span className="badge rounded-pill text-bg-danger">Inactive</span>}
                                                 </div>
                                             </td>
 

@@ -5,8 +5,10 @@ import { Routes, Route } from "react-router-dom";
 import CreateStudent from "./pages/CreateStudent";
 import CreateSchool from "./pages/SchoolMaster"
 import Dashboard from "./pages/Dashboard";
-import CreateUsers from "./pages/Users"
-import CreateSubject from "./pages/Subject"
+import CreateUsers from "./pages/Users";
+import CreateSubject from "./pages/Subject";
+import CreateRole from "./pages/Roles";
+import CreateSection from "./pages/Section"
 function App() {
   return (
     <div className="App">
@@ -39,6 +41,8 @@ function App() {
             <Route exact path="/create-school" element={<CreateSchool />} />
             <Route exact path="/create-user" element={<CreateUsers />} />
             <Route exact path="/create-subject" element={<CreateSubject />} />
+            <Route exact path="/create-Role" element={<CreateRole />} />
+            <Route exact path="/create-section" element={<CreateSection />} />
           </Routes>
         </div>
       </div>
