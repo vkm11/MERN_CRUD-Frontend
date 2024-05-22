@@ -20,6 +20,8 @@ function Roles() {
     const [searchName, setSearchName] = useState("");
     const [searchStatus, setSearchStatus] = useState("");
     const [searchResult, setSearchResult] = useState([]);
+    const [successMsg, setSuccessMsg] = useState("");
+
 
     // pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -36,23 +38,30 @@ function Roles() {
     const toggleSearchForm = () => {
         setShowRolesForm(false);
         setShowSearchForm(true);
-        setHideStatus(true);
+        setHideStatus(false);
         setRoleForm({
             name: "",
             description: "",
             status: ""
         });
+        clearSearchForm()
     };
 
     const toggleRolesForm = () => {
         setShowRolesForm(true);
         setShowSearchForm(false);
         setHideStatus(false);
+        setSelectedRole(false);
         setRoleForm({
             name: "",
             description: "",
             status: "1"
         });
+    };
+    const clearSearchForm = () => {
+        setSearchName("");
+        setSearchStatus("");
+        setSearchResult(rolegetForm); 
     };
 
     const handleInputChange = (e) => {
@@ -63,14 +72,19 @@ function Roles() {
         }));
     };
 
+    // const handleStatusChange = (e) => {
+    //     const { value } = e.target;
+    //     setRoleForm(prevState => ({
+    //         ...prevState,
+    //         status: value
+    //     }));
+    // };
     const handleStatusChange = (e) => {
-        const { value } = e.target;
         setRoleForm(prevState => ({
             ...prevState,
-            status: value
+            status: e.target.value
         }));
     };
-
     const addRoles = (e) => {
         e.preventDefault();
         if (validateForm()) {
@@ -79,33 +93,33 @@ function Roles() {
                 axios
                     .post("http://localhost:4000/role/create-role", roleForm)
                     .then((res) => {
-                        if (res.status === 200) {
-                            console.log(res.data);
-                            setRoleForm({
-                                name: "",
-                                description: "",
-                                status: ""
-                            });
-                            setErrors({});
-                            alert(res.data.message); // Show success message
-                            window.location.reload();
-                        }
+                        console.log(res.data);
+                        setSuccessMsg(res.data.message)
+                       
+                        setRoleForm({
+                            name: "",
+                            description: "",
+                            status: ''
+                        });
+                        setErrors({});
+                        setTimeout(()=>{
+                            setSuccessMsg("")
+                            getData()
+                        },1000)
                     })
                     .catch((error) => {
-                            if (error.response.status === 400) {
-                                console.log("Role name is already added"); // Log specific error message
-                                alert("Role name is already added"); // Show specific error message
-                            } else {
-                                console.error(`Error: ${error.response.data.message}`); // Log other server errors
-                                alert("An unexpected error occurred. Please try again.");
-                            }
-                    
+                        console.error("Error:", error);
+                        // Handle error and display appropriate message to the user
                     });
+                
+
             } else {
+                if (window.confirm("Are you sure you want to update this role?")) {
                 axios
                     .put(`http://localhost:4000/role/update-role/${selectedRole._id}`, roleForm)
                     .then((res) => {
                         console.log(res.data);
+                        setSuccessMsg(res.data.msg)
                         setRoleForm({
                             name: "",
                             description: "",
@@ -113,16 +127,22 @@ function Roles() {
                         });
                         setSelectedRole(null);
                         setErrors({});
-                        window.location.reload();
+                        
+                        setTimeout(()=>{
+                            setSuccessMsg("")
+                            toggleRolesForm()
+                            getData()
+                        },1000)
                     })
                     .catch((error) => {
                         console.error("Error:", error);
                         // Handle error from server if needed
                     });
+                }
             }
         }
     };
-    useEffect(() => {
+    const getData = (e) => {
         axios
             .get("http://localhost:4000/role/")
             .then((res) => {
@@ -132,23 +152,22 @@ function Roles() {
             .catch((error) => {
                 console.log(error);
             });
+    }
+    useEffect(() => {
+        getData()
     }, []);
     const handleSearch = () => {
         if (searchName === "" && searchStatus === "") {
-            setSearchResult([]);
-            setTimeout(() => {
-                setSearchResult(rolegetForm);
-            }, 1000);
+            setSearchResult(rolegetForm);
         } else {
             const filteredItems = rolegetForm.filter((role) => {
-                return (
-                    role.name.toLowerCase().includes(searchName.toLowerCase()) &&
-                    String(role.status).toLowerCase().includes(searchStatus.toLowerCase())
-                );
+                const nameMatch = role.name.toLowerCase().includes(searchName.toLowerCase());
+                const statusMatch = searchStatus === "" || String(role.status) === searchStatus;
+
+                return nameMatch && statusMatch;
             });
             setSearchResult(filteredItems);
         }
-        setCurrentPage(1); // Reset to the first page after search
     };
 
     const validateForm = () => {
@@ -195,10 +214,12 @@ function Roles() {
     };
 
     const deleteRole = (_id) => {
+        if (window.confirm("Are you sure you want to delete this role"))
         axios
             .delete("http://localhost:4000/role/delete-role/" + _id)
-            .then(() => {
+            .then((res) => {
                 console.log("Data successfully deleted!");
+                setSuccessMsg(res.data.msg);
 
                 // After deletion, fetch updated data
                 axios
@@ -206,6 +227,10 @@ function Roles() {
                     .then((res) => {
                         setRolegetForm(res.data.data);
                         setSearchResult(res.data.data);
+
+                        setTimeout(()=>{
+                            setSuccessMsg("");
+                        },1000)
                     })
                     .catch((error) => {
                         console.log(error);
@@ -247,7 +272,7 @@ function Roles() {
                                             />
                                         </div>
                                         <div className="col-sm-4">
-                                            <label className="form-label my-0">Status</label><span className="text-danger">*</span>
+                                            <label className="form-label my-0">Status</label>
                                             <select
                                                 className="form-control"
                                                 value={searchStatus}
@@ -314,13 +339,20 @@ function Roles() {
                                                 </div>
                                             )}
                                         </div>
-                                        <div className="text-end">
+                                        
+                                        <div className="text-end pt-1">
                                             <button className="btn btn-primary" type="submit" onClick={addRoles}>
                                                 {selectedRole ? "Update" : "Submit"}
                                             </button>
                                         </div>
                                     </form>
                                    
+                                </div>
+                            )}
+
+                            {successMsg && (
+                                <div className="text-success text-center">
+                                    {successMsg}
                                 </div>
                             )}
 

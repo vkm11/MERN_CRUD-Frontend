@@ -19,8 +19,7 @@ function CreateStudent() {
     // pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
-
-    // Logic to calculate the index of the first and last item of the current page
+    
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = usergetForm.slice(indexOfFirstItem, indexOfLastItem);
@@ -39,7 +38,6 @@ function CreateStudent() {
         let isValid = true;
         const newErrors = {};
 
-        // Required field validation
         if (!userForm.name.trim()) {
             newErrors.name = "Name is required";
             isValid = false;
@@ -53,7 +51,6 @@ function CreateStudent() {
             isValid = false;
         }
 
-        // Check if rollno is a string before calling trim()
         if (typeof userForm.rollno === 'string' && !userForm.rollno.trim()) {
             newErrors.rollno = "Roll number is required";
             isValid = false;
@@ -69,10 +66,7 @@ function CreateStudent() {
 
     const addForm = (e) => {
         e.preventDefault();
-
-        // Validate form before submitting
         if (validateForm()) {
-            // Check if selectedStudent is null, if it is, create a new student, otherwise update the selected student
             if (!selectedStudent) {
                 axios
                     .post("http://localhost:4000/students/create-student", userForm)
@@ -92,7 +86,6 @@ function CreateStudent() {
                     })
                     .catch((error) => {
                         console.error("Error:", error);
-                        // Handle error from server if needed
                     });
             } else {
                 axios
@@ -114,7 +107,7 @@ function CreateStudent() {
                     })
                     .catch((error) => {
                         console.error("Error:", error);
-                        // Handle error from server if needed
+                  
                     });
             }
         }
@@ -165,10 +158,6 @@ function CreateStudent() {
             rollno: selected.rollno,
         });
     };
-
-    // const heading = {
-    //     borderBottom: '1px solid red'
-    // };
 
     return (
         <Layout>

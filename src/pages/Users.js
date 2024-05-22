@@ -37,7 +37,6 @@ function Users() {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
 
-    // Calculate the index of the first and last item of the current page
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = searchResult.slice(indexOfFirstItem, indexOfLastItem);
@@ -70,9 +69,9 @@ function Users() {
 
     const toggleSearchForm = () => {
         setShowUserForm(!showSearchForm);
-        setShowUserForm(false); // Close school form when opening profile form
+        setShowUserForm(false); 
         setShowSearchForm(true);
-        setUserForm({ // Reset form fields
+        setUserForm({
             name: "",
             email: "",
             mob: "",
@@ -89,8 +88,9 @@ function Users() {
         setShowUserForm(!showUserForm);
         setIsVisibleStatus(false);
         setShowUserForm(true);
-        setShowSearchForm(false); // Close profile form when opening school form
-        setUserForm({ // Reset form fields
+        setSelectedUser(false);
+        setShowSearchForm(false);
+        setUserForm({ 
             name: "",
             email: "",
             mob: "",
@@ -123,12 +123,11 @@ function Users() {
     const inputsHandler = (e) => {
         const { name, value } = e.target;
 
-        // If the changed field is 'email', update 'uname' to match it
         if (name === "email") {
             setUserForm(prevState => ({
                 ...prevState,
                 [name]: value,
-                uname: value // Set 'uname' to be the same as 'email'
+                uname: value 
             }));
         } else {
             setUserForm(prevState => ({
@@ -144,7 +143,6 @@ function Users() {
         let isValid = true;
         const newErrors = {};
 
-        // // Required field validation
         if (!userForm.name || !userForm.name.trim()) {
             newErrors.name = "Name is required";
             isValid = false;
@@ -186,8 +184,6 @@ function Users() {
             newErrors.password = "Password is required";
             isValid = false;
         }
-        // Required field validation
-
 
 
 
@@ -196,7 +192,7 @@ function Users() {
     };
 
     const addUser = (e) => {
-        e.preventDefault(); // Prevent default form submission behavior
+        e.preventDefault();
 
         if (validateForm()) {
             if (!selectedUser) {
@@ -220,7 +216,6 @@ function Users() {
                     })
                     .catch((error) => {
                         console.error("Error:", error);
-                        // Handle error and display appropriate message to the user
                     });
 
             } else {
@@ -245,7 +240,6 @@ function Users() {
                     })
                     .catch((error) => {
                         console.error("Error:", error);
-                        // Handle error from server if needed
                     });
             }
         }
@@ -287,8 +281,6 @@ function Users() {
             .delete("http://localhost:4000/user/delete-user/" + _id)
             .then(() => {
                 console.log("Data successfully deleted!");
-
-                // After deletion, fetch updated data
                 axios
                     .get("http://localhost:4000/user/")
                     .then((res) => {
@@ -303,26 +295,6 @@ function Users() {
                 console.log(error);
             });
     };
-    // Filter items based on search criteria
-    // const handleSearch = () => {
-    //     if (searchName === "" && searchEmail === "") {
-
-    //         setSearchResult([]);
-    //         setTimeout(() => {
-    //             setSearchResult(usergetForm);
-    //         }, 1000)
-
-    //     } else {
-    //         const filteredItems = usergetForm.filter((user) => {
-    //             return (
-    //                 user.name.toLowerCase().includes(searchName.toLowerCase()) &&
-    //                 user.email.toLowerCase().includes(searchEmail.toLowerCase())
-    //             );
-    //         });
-    //         setSearchResult(filteredItems);
-    //     }
-    //     setCurrentPage(1); // Reset to the first page after search
-    // };
     const handleSearch = () => {
         if (searchName === "" && searchEmail === "" && searchStatus === "") {
             setSearchResult([]);
@@ -339,7 +311,7 @@ function Users() {
             });
             setSearchResult(filteredItems);
         }
-        setCurrentPage(1); // Reset to the first page after search
+        setCurrentPage(1);
     };
 
 
@@ -379,11 +351,12 @@ function Users() {
                                         className="form-control"
                                         placeholder="Search by email"
                                         value={searchEmail}
+                                        
                                         onChange={(e) => setSearchEmail(e.target.value)}
                                     />
                                 </div>
                                 <div className="col-sm-4">
-                                    <label className="form-label my-0">Status</label><span className="text-danger">*</span>
+                                    <label className="form-label my-0">Status</label>
                                     <select
                                         className="form-control"
                                         value={searchStatus}
@@ -426,6 +399,7 @@ function Users() {
                                         name="mob"
                                         value={userForm.mob}
                                         onChange={inputsHandler}
+                                        maxLength="10"
                                     />
                                     {errors.mob && (
                                         <div className="text-danger">{errors.mob}</div>
@@ -516,8 +490,6 @@ function Users() {
                                     <div className='col-sm-3'>
                                         
                                         <label className='form-label my-0'>Password</label><span className='text-danger'>*</span>
-                                        {/* <input type="text" className="form-control" name="password" value={userForm.password} onChange={inputsHandler} /> 
-                                        */}
                                         <div className="input-group">
                                         <input
                                             type={showPassword ? "text" : "password"}

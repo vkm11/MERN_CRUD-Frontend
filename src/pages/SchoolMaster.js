@@ -24,9 +24,9 @@ function CreateSchool() {
 
     const toggleSearchForm = () => {
         setShowSearchForm(!showSearchForm);
-        setShowSchoolForm(false); // Close school form when opening profile form
+        setShowSchoolForm(false); 
         setShowSearchForm(true);
-        setUserForm({ // Reset form fields
+        setUserForm({ 
             name: "",
             class: "",
             desc: "",
@@ -37,8 +37,8 @@ function CreateSchool() {
         setShowSchoolForm(!showSchoolForm);
         
         setShowSchoolForm(true);
-        setShowSearchForm(false); // Close profile form when opening school form
-        setUserForm({ // Reset form fields
+        setShowSearchForm(false); 
+        setUserForm({ 
             name: "",
             class: "",
             desc: "",
@@ -79,12 +79,10 @@ function CreateSchool() {
         let isValid = true;
         const newErrors = {};
 
-        // Check if userForm is defined
         if (!userForm) {
-            return false; // Return false if userForm is undefined
+            return false; 
         }
 
-        // Required field validation
         if (!userForm.name || !userForm.name.trim()) {
             newErrors.name = "Name is required";
             isValid = false;
@@ -109,9 +107,8 @@ function CreateSchool() {
     const addSchool = (e) => {
         e.preventDefault();
 
-        // Validate form before submitting
         if (validateForm()) {
-            // Check if selectedStudent is null, if it is, create a new student, otherwise update the selected student
+           
             if (!selectedSchool) {
                 axios
                     .post("http://localhost:4000/school/create-school", userForm)
@@ -127,7 +124,6 @@ function CreateSchool() {
                     })
                     .catch((error) => {
                         console.error("Error:", error);
-                        // Handle error from server if needed
                     });
             } else {
                 axios
@@ -145,7 +141,6 @@ function CreateSchool() {
                     })
                     .catch((error) => {
                         console.error("Error:", error);
-                        // Handle error from server if needed
                     });
             }
         }
@@ -156,8 +151,6 @@ function CreateSchool() {
             .delete("http://localhost:4000/school/delete-school/" + _id)
             .then(() => {
                 console.log("Data successfully deleted!");
-
-                // After deletion, fetch updated data
                 axios
                     .get("http://localhost:4000/school/")
                     .then((res) => {
@@ -185,19 +178,6 @@ function CreateSchool() {
             });
     }, []);
 
-    // // Filter items based on search criteria
-    // const handleSearch = () => {
-    //     const filteredItems = usergetForm.filter((user) => {
-    //         return (
-    //             user.name.toLowerCase().includes(searchName.toLowerCase()) &&
-    //             user.class.toLowerCase().includes(searchClass.toLowerCase())
-    //         );
-    //     });
-    //     setSearchResult(filteredItems);
-    //     setCurrentPage(1); // Reset to the first page after search
-    // };
-
-    // Filter items based on search criteria
     const handleSearch = () => {
         if (searchName === "" && searchClass === "") {
 
@@ -215,7 +195,7 @@ function CreateSchool() {
             });
             setSearchResult(filteredItems);
         }
-        setCurrentPage(1); // Reset to the first page after search
+        setCurrentPage(1); 
     };
 
 

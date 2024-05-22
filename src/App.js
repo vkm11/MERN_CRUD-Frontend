@@ -6,7 +6,7 @@ import CreateStudent from "./pages/CreateStudent";
 import CreateSchool from "./pages/SchoolMaster"
 import Dashboard from "./pages/Dashboard";
 import CreateUsers from "./pages/Users";
-import CreateSubject from "./pages/Subject";
+import CreateParent from "./pages/Parents";
 import CreateRole from "./pages/Roles";
 import CreateSection from "./pages/Section"
 function App() {
@@ -40,8 +40,8 @@ function App() {
             <Route exact path="/create-student" element={<CreateStudent />} />
             <Route exact path="/create-school" element={<CreateSchool />} />
             <Route exact path="/create-user" element={<CreateUsers />} />
-            <Route exact path="/create-subject" element={<CreateSubject />} />
-            <Route exact path="/create-Role" element={<CreateRole />} />
+            <Route exact path="/create-parent" element={<CreateParent />} />
+            <Route exact path="/create-role" element={<CreateRole />} />
             <Route exact path="/create-section" element={<CreateSection />} />
           </Routes>
         </div>
