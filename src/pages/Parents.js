@@ -42,6 +42,7 @@ function Parents() {
     }
     const toggleParentForm = () =>{
         setHideStatus(false)
+        setIsChecked(true)
         setUserForm({
             firstName: "",
             lastName: "",
