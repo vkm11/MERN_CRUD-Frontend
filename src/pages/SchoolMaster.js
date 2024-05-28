@@ -27,6 +27,7 @@ function CreateSchool() {
     // toggle form 
     const [showSearchForm, setShowSearchForm] = useState(false);
     const [showSchoolForm, setShowSchoolForm] = useState(true);
+    const [successMsg, setSuccessMsg] = useState(false);
 
     const toggleSearchForm = () => {
         setShowSearchForm(!showSearchForm);
@@ -126,6 +127,7 @@ function CreateSchool() {
                     .post("http://localhost:4000/school/create-school", userForm)
                     .then((res) => {
                         console.log(res.data);
+                        setSuccessMsg(res.data.message)
                         setUserForm({
                             name: "",
                             class: "",
@@ -133,7 +135,11 @@ function CreateSchool() {
                             startdate: "",
                         });
                         setErrors({});
-                        window.location.reload();
+                        setTimeout(()=>{
+                            setSuccessMsg('')
+                            getSchoolData()
+                        },1000)
+                        // window.location.reload();
                     })
                     .catch((error) => {
                         console.error("Error:", error);
@@ -143,6 +149,7 @@ function CreateSchool() {
                     .put(`http://localhost:4000/school/update-school/${selectedSchool._id}`, userForm)
                     .then((res) => {
                         console.log(res.data);
+                        setSuccessMsg(res.data.msg)
                         setUserForm({
                             name: "",
                             class: "",
@@ -151,7 +158,11 @@ function CreateSchool() {
                         });
                         setSelectedSchool(null);
                         setErrors({});
-                        window.location.reload();
+                        // window.location.reload();
+                        setTimeout(() => {
+                            setSuccessMsg('')
+                            getSchoolData()
+                        }, 1000)
                     })
                     .catch((error) => {
                         console.error("Error:", error);
@@ -163,13 +174,18 @@ function CreateSchool() {
     const deleteSchool = (_id) => {
         axios
             .delete("http://localhost:4000/school/delete-school/" + _id)
-            .then(() => {
+            .then((res) => {
                 console.log("Data successfully deleted!");
+                setSuccessMsg(res.data.msg)
                 axios
                     .get("http://localhost:4000/school/")
                     .then((res) => {
-                        setUsergetForm(res.data.data);
-                        setSearchResult(res.data.data);
+                        setTimeout(()=>{
+                            getSchoolData()
+                            setUsergetForm(res.data.data);
+                            setSearchResult(res.data.data);
+                            setSuccessMsg('')
+                        },1000)
                     })
                     .catch((error) => {
                         console.log(error);
@@ -179,8 +195,7 @@ function CreateSchool() {
                 console.log(error);
             });
     };
-
-    useEffect(() => {
+    const getSchoolData=() =>{
         axios
             .get("http://localhost:4000/school/")
             .then((res) => {
@@ -190,6 +205,10 @@ function CreateSchool() {
             .catch((error) => {
                 console.log(error);
             });
+    }
+
+    useEffect(() => {
+        getSchoolData()
     }, []);
 
     const handleSearch = () => {
@@ -354,6 +373,9 @@ function CreateSchool() {
                         </div>
                     </form>
                     )}
+                    <div>
+                        {successMsg && <p className="text-center text-success">{successMsg}</p>}
+                    </div>
                 </div>
                 
                 <div className="card p-2 mt-2">
