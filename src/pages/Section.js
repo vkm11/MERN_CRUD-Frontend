@@ -63,13 +63,18 @@ function Section() {
             setSearchResult(filteredItems);
         }
     };
-
+    const capitalizeFirstLetter = (string) => {
+        if (string.length === 0) return '';
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    };
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setSectionForm((prevState) => ({
             ...prevState,
-            [name]: value,
+            // [name]: value,
+            [name]: name === 'name' ? capitalizeFirstLetter(value) : value,
         }));
+  
     };
 
     const validateForm = () => {

@@ -4,11 +4,17 @@ import Layout from "../components/Layouts/Layout"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan, faPenToSquare, faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Pagination from "react-js-pagination";
+// import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
+
+
+
 function CreateSchool() {
     const [userForm, setUserForm] = useState({
         name: "",
         class: "",
         desc: "",
+        startdate: "",
     });
     const [usergetForm, setUsergetForm] = useState([]);
     const [errors, setErrors] = useState({});
@@ -30,6 +36,7 @@ function CreateSchool() {
             name: "",
             class: "",
             desc: "",
+            startdate: ""
         });
     };
 
@@ -42,6 +49,7 @@ function CreateSchool() {
             name: "",
             class: "",
             desc: "",
+            startdate: ""
         });
     };
 
@@ -92,6 +100,10 @@ function CreateSchool() {
             newErrors.class = "Class is required";
             isValid = false;
         }
+        if (!userForm.startdate || !userForm.startdate.trim()) {
+            newErrors.startdate = "Start date is required";
+            isValid = false;
+        }
 
         // if (!userForm.desc || !userForm.desc.trim()) {
         //     newErrors.desc = "Description is required";
@@ -118,6 +130,7 @@ function CreateSchool() {
                             name: "",
                             class: "",
                             desc: "",
+                            startdate: "",
                         });
                         setErrors({});
                         window.location.reload();
@@ -134,6 +147,7 @@ function CreateSchool() {
                             name: "",
                             class: "",
                             desc: "",
+                            startdate: "",
                         });
                         setSelectedSchool(null);
                         setErrors({});
@@ -208,7 +222,26 @@ function CreateSchool() {
             name: selected.name,
             class: selected.class,
             desc: selected.desc,
+            startdate: selected.startdate.substring(0, 10),
         });
+    };
+
+    const formatDateTime = (dateString) => {
+        try {
+            if (!dateString) {
+                return "No date provided";
+            }
+
+            const date = parseISO(dateString);
+            if (!date || isNaN(date.getTime())) {
+                return "Invalid date";
+            }
+
+            return format(date, 'dd/MM/yyyy');
+        } catch (error) {
+            console.error("Error formatting date:", error);
+            return "Invalid date";
+        }
     };
 
     return (
@@ -220,8 +253,8 @@ function CreateSchool() {
                             <p className="h5">School Master</p>
                         </div>
                         <div>
-                            <button onClick={toggleSearchForm}><FontAwesomeIcon icon={faMagnifyingGlass} /> Search</button>
-                            <button onClick={toggleSchoolForm}><FontAwesomeIcon icon={faPlus} /> Add School</button>
+                            <button className='searchBtn me-1 ms-1' onClick={toggleSearchForm}><FontAwesomeIcon icon={faMagnifyingGlass} /> Search</button>
+                            <button className='addBtn' onClick={toggleSchoolForm}><FontAwesomeIcon icon={faPlus} /> Add </button>
                         </div>
                     </div>
 
@@ -298,6 +331,21 @@ function CreateSchool() {
                                 />
                               
                             </div>
+                            <div className="col-sm-3 mb-3">
+                                    <label className="form-label my-0">Start date</label>
+                                    <input
+                                        type="date"
+                                        className="form-control"
+                                        name="startdate"
+                                        id="startdate"
+                                        value={userForm.startdate}
+                                        onChange={inputsHandler}
+                                    />
+                                    {errors.startdate && (
+                                        <div className="text-danger">{errors.startdate}</div>
+                                    )}
+                            </div>
+                               
                         </div>
                         <div className="py-2 text-end">
                             <button type="submit" onClick={addSchool} className="btn btn-primary">
@@ -318,6 +366,7 @@ function CreateSchool() {
                                         <th scope="col">Name</th>
                                         <th scope="col">Class</th>
                                         <th scope="col">Description</th>
+                                        <th scope="col">Start date</th>
                                         <th scope="col" className="text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -351,16 +400,17 @@ function CreateSchool() {
                                             <td>{user.name}</td>
                                             <td>{user.class}</td>
                                             <td>{user.desc}</td>
+                                            <td>{formatDateTime(user.startdate)}</td>
                                             <td className="text-center">
                                                 <button
                                                     className="btn btn-primary btn-sm me-2"
                                                     onClick={() => updateSchool(user._id)}>
-                                                    <FontAwesomeIcon icon={faPenToSquare} /> Edit
+                                                    <FontAwesomeIcon icon={faPenToSquare} />
                                                 </button>
                                                 <button
                                                     className="btn btn-danger btn-sm"
                                                     onClick={() => deleteSchool(user._id)}>
-                                                    <FontAwesomeIcon icon={faTrashCan} /> Delete
+                                                    <FontAwesomeIcon icon={faTrashCan} />
                                                 </button>
                                             </td>
                                         </tr>

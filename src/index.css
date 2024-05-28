@@ -43,9 +43,15 @@ ul li a:hover {
   border-radius: 5px;
   color: #ffff;
 }
+.getbackBtn{
+  background: linear-gradient(5deg, orange, transparent);
+  border-radius: 5px;
+  color: #ffff;
+}
 .btn-close{
   color: white !important;
   text-shadow: #ffff !important;
   background: #ffffff;
   font-size:xx-large ;
 }
+
