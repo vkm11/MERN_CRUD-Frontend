@@ -31,9 +31,9 @@ function CreateSchool() {
 
     const toggleSearchForm = () => {
         setShowSearchForm(!showSearchForm);
-        setShowSchoolForm(false); 
+        setShowSchoolForm(false);
         setShowSearchForm(true);
-        setUserForm({ 
+        setUserForm({
             name: "",
             class: "",
             desc: "",
@@ -43,10 +43,10 @@ function CreateSchool() {
 
     const toggleSchoolForm = () => {
         setShowSchoolForm(!showSchoolForm);
-        
+
         setShowSchoolForm(true);
-        setShowSearchForm(false); 
-        setUserForm({ 
+        setShowSearchForm(false);
+        setUserForm({
             name: "",
             class: "",
             desc: "",
@@ -89,7 +89,7 @@ function CreateSchool() {
         const newErrors = {};
 
         if (!userForm) {
-            return false; 
+            return false;
         }
 
         if (!userForm.name || !userForm.name.trim()) {
@@ -121,7 +121,7 @@ function CreateSchool() {
         e.preventDefault();
 
         if (validateForm()) {
-           
+
             if (!selectedSchool) {
                 axios
                     .post("http://localhost:4000/school/create-school", userForm)
@@ -135,10 +135,10 @@ function CreateSchool() {
                             startdate: "",
                         });
                         setErrors({});
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             setSuccessMsg('')
                             getSchoolData()
-                        },1000)
+                        }, 1000)
                         // window.location.reload();
                     })
                     .catch((error) => {
@@ -177,25 +177,16 @@ function CreateSchool() {
             .then((res) => {
                 console.log("Data successfully deleted!");
                 setSuccessMsg(res.data.msg)
-                axios
-                    .get("http://localhost:4000/school/")
-                    .then((res) => {
-                        setTimeout(()=>{
-                            getSchoolData()
-                            setUsergetForm(res.data.data);
-                            setSearchResult(res.data.data);
-                            setSuccessMsg('')
-                        },1000)
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
+                setTimeout(() => {
+                    getSchoolData()
+                    setSuccessMsg('')
+                }, 1000)
             })
             .catch((error) => {
                 console.log(error);
             });
     };
-    const getSchoolData=() =>{
+    const getSchoolData = () => {
         axios
             .get("http://localhost:4000/school/")
             .then((res) => {
@@ -228,7 +219,7 @@ function CreateSchool() {
             });
             setSearchResult(filteredItems);
         }
-        setCurrentPage(1); 
+        setCurrentPage(1);
     };
 
 
@@ -236,7 +227,7 @@ function CreateSchool() {
         const selected = usergetForm.find((user) => user._id === _id);
         setSelectedSchool(selected);
         setShowSchoolForm(true);
-        setShowSearchForm(false); 
+        setShowSearchForm(false);
         setUserForm({
             name: selected.name,
             class: selected.class,
@@ -278,79 +269,78 @@ function CreateSchool() {
                     </div>
 
                     {showSearchForm && (
-                    <div className="searchdiv">
-                        <div className="row">
-                        <div className="col-sm-4 mb-3">
-                            <label>Name</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Search by name"
-                                value={searchName}
-                                onChange={(e) => setSearchName(e.target.value)}
-                            />
+                        <div className="searchdiv">
+                            <div className="row">
+                                <div className="col-sm-4 mb-3">
+                                    <label>Name</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Search by name"
+                                        value={searchName}
+                                        onChange={(e) => setSearchName(e.target.value)}
+                                    />
+                                </div>
+                                <div className="col-sm-4 mb-3">
+                                    <label>Class</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Search by class"
+                                        value={searchClass}
+                                        onChange={(e) => setSearchClass(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <div className="text-end py-2">
+                                <button className="btn btn-primary" onClick={handleSearch}>Search</button>
+                            </div>
                         </div>
-                        <div className="col-sm-4 mb-3">
-                            <label>Class</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Search by class"
-                                value={searchClass}
-                                onChange={(e) => setSearchClass(e.target.value)}
-                            />
-                        </div>
-                        </div>
-                        <div className="text-end py-2">
-                            <button className="btn btn-primary" onClick={handleSearch}>Search</button>
-                        </div>
-                    </div>
                     )}
                     {showSchoolForm && (
+                        <form>
+                            <div className="row">
+                                <div className="col-sm-3 mb-3">
+                                    <label className="form-label my-0">Name</label><span className="text-danger">*</span>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="name"
+                                        id="name"
+                                        value={userForm.name}
+                                        onChange={inputsHandler}
+                                    />
+                                    {errors.name && (
+                                        <div className="text-danger">{errors.name}</div>
+                                    )}
+                                </div>
+                                <div className="col-sm-3 mb-3">
+                                    <label className="form-label my-0">Class</label><span className="text-danger">*</span>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="class"
+                                        id="class"
+                                        value={userForm.class}
+                                        onChange={inputsHandler}
+                                    />
+                                    {errors.class && (
+                                        <div className="text-danger">{errors.class}</div>
+                                    )}
+                                </div>
+                                <div className="col-sm-3 mb-3">
+                                    <label className="form-label my-0">Description</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="desc"
+                                        id="desc"
+                                        value={userForm.desc}
+                                        onChange={inputsHandler}
+                                    />
 
-                    <form>
-                        <div className="row">
-                            <div className="col-sm-3 mb-3">
-                                <label className="form-label my-0">Name</label><span className="text-danger">*</span>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    name="name"
-                                    id="name"
-                                    value={userForm.name}
-                                    onChange={inputsHandler}
-                                />
-                                {errors.name && (
-                                    <div className="text-danger">{errors.name}</div>
-                                )}
-                            </div>
-                            <div className="col-sm-3 mb-3">
-                                <label className="form-label my-0">Class</label><span className="text-danger">*</span>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    name="class"
-                                    id="class"
-                                    value={userForm.class}
-                                    onChange={inputsHandler}
-                                />
-                                {errors.class && (
-                                    <div className="text-danger">{errors.class}</div>
-                                )}
-                            </div>
-                            <div className="col-sm-3 mb-3">
-                                <label className="form-label my-0">Description</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    name="desc"
-                                    id="desc"
-                                    value={userForm.desc}
-                                    onChange={inputsHandler}
-                                />
-                              
-                            </div>
-                            <div className="col-sm-3 mb-3">
+                                </div>
+                                <div className="col-sm-3 mb-3">
                                     <label className="form-label my-0">Start date</label>
                                     <input
                                         type="date"
@@ -363,21 +353,22 @@ function CreateSchool() {
                                     {errors.startdate && (
                                         <div className="text-danger">{errors.startdate}</div>
                                     )}
+                                </div>
+
                             </div>
-                               
-                        </div>
-                        <div className="py-2 text-end">
-                            <button type="submit" onClick={addSchool} className="btn btn-primary">
-                                {selectedSchool ? "Update" : "Submit"}
-                            </button>
-                        </div>
-                    </form>
+                            <div className="py-2 text-end">
+                                <button type="submit" onClick={addSchool} className="btn btn-primary">
+                                    {selectedSchool ? "Update" : "Submit"}
+                                </button>
+                            </div>
+                        </form>
+                        
                     )}
                     <div>
                         {successMsg && <p className="text-center text-success">{successMsg}</p>}
                     </div>
                 </div>
-                
+
                 <div className="card p-2 mt-2">
                     {currentItems.length > 0 ? (
                         <div className="table-responsive">
