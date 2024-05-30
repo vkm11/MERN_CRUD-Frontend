@@ -31,6 +31,7 @@ function Users() {
     const [showUserForm, setShowUserForm] = useState(true);
     const [isVisibleStatus, setIsVisibleStatus] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [successMsg, setSuccessMsg] = useState(false)
 
 
     // pagination
@@ -69,7 +70,7 @@ function Users() {
 
     const toggleSearchForm = () => {
         setShowUserForm(!showSearchForm);
-        setShowUserForm(false); 
+        setShowUserForm(false);
         setShowSearchForm(true);
         setUserForm({
             name: "",
@@ -90,7 +91,7 @@ function Users() {
         setShowUserForm(true);
         setSelectedUser(false);
         setShowSearchForm(false);
-        setUserForm({ 
+        setUserForm({
             name: "",
             email: "",
             mob: "",
@@ -127,7 +128,7 @@ function Users() {
             setUserForm(prevState => ({
                 ...prevState,
                 [name]: value,
-                uname: value 
+                uname: value
             }));
         } else {
             setUserForm(prevState => ({
@@ -136,7 +137,7 @@ function Users() {
             }));
         }
     };
- 
+
 
 
     const validateForm = () => {
@@ -165,7 +166,11 @@ function Users() {
         } else if (isNaN(userForm.mob)) {
             newErrors.mob = "Please enter a valid mobile number";
             isValid = false;
+        } else if (userForm.mob.length < 9 || userForm.mob.length > 10) {
+            newErrors.mob = "Mobile number must be between 9 and 10 digits";
+            isValid = false;
         }
+
 
         if (!userForm.caddress.trim()) {
             newErrors.caddress = "Current address is required";
@@ -200,6 +205,7 @@ function Users() {
                     .post("http://localhost:4000/user/create-user", userForm)
                     .then((res) => {
                         console.log(res.data);
+                        setSuccessMsg(res.data.message)
                         setUserForm({
                             name: "",
                             mob: "",
@@ -211,8 +217,11 @@ function Users() {
                             password: "",
                             status: ''
                         });
+                        setTimeout(() => {
+                            getUserData();
+                            setSuccessMsg("")
+                        }, 1000)
                         setErrors({});
-                        window.location.reload();
                     })
                     .catch((error) => {
                         console.error("Error:", error);
@@ -223,6 +232,7 @@ function Users() {
                     .put(`http://localhost:4000/user/update-user/${selectedUser._id}`, userForm)
                     .then((res) => {
                         console.log(res.data);
+                        setSuccessMsg(res.data.msg)
                         setUserForm({
                             name: "",
                             email: "",
@@ -236,7 +246,10 @@ function Users() {
                         });
                         setSelectedUser(null);
                         setErrors({});
-                        window.location.reload();
+                        setTimeout(()=>{
+                            getUserData();
+                            setSuccessMsg("")
+                        },1000)
                     })
                     .catch((error) => {
                         console.error("Error:", error);
@@ -244,7 +257,8 @@ function Users() {
             }
         }
     };
-    useEffect(() => {
+
+    const getUserData = () => {
         axios
             .get("http://localhost:4000/user/")
             .then((res) => {
@@ -254,6 +268,9 @@ function Users() {
             .catch((error) => {
                 console.log(error);
             });
+    }
+    useEffect(() => {
+        getUserData()
     }, []);
 
     const updateUser = (_id) => {
@@ -279,17 +296,14 @@ function Users() {
     const deleteUser = (_id) => {
         axios
             .delete("http://localhost:4000/user/delete-user/" + _id)
-            .then(() => {
+            .then((res) => {
                 console.log("Data successfully deleted!");
-                axios
-                    .get("http://localhost:4000/user/")
-                    .then((res) => {
-                        setUsergetForm(res.data.data);
-                        setSearchResult(res.data.data);
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
+                setSuccessMsg(res.data.msg);
+                setTimeout(()=>{
+                    getUserData()
+                    toggleUserForm()
+                    setSuccessMsg("")
+                },1000)
             })
             .catch((error) => {
                 console.log(error);
@@ -328,7 +342,7 @@ function Users() {
                             <button className='addBtn' onClick={toggleUserForm} ><FontAwesomeIcon icon={faPlus} /> Add User</button>
                         </div>
                     </div>
-                    
+
                     {showSearchForm && (
                         <div className="searchDiv">
                             <div>
@@ -351,7 +365,7 @@ function Users() {
                                         className="form-control"
                                         placeholder="Search by email"
                                         value={searchEmail}
-                                        
+
                                         onChange={(e) => setSearchEmail(e.target.value)}
                                     />
                                 </div>
@@ -375,149 +389,155 @@ function Users() {
                         </div>
                     )}
                     {showUserForm && (
-                        <form>
-                            <div><p className='h6 pb-2 headigs'>Add New User Master Group:</p></div>
-                            <div className="row">
-                                <div className="col-sm-3">
-                                    <label className="form-label my-0">Name</label><span className="text-danger">*</span>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name="name"
-                                        value={userForm.name}
-                                        onChange={inputsHandler}
-                                    />
-                                    {errors.name && (
-                                        <div className="text-danger">{errors.name}</div>
-                                    )}
-                                </div>
-                                <div className="col-sm-3">
-                                    <label className="form-label my-0">Mobile number</label><span className="text-danger">*</span>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name="mob"
-                                        value={userForm.mob}
-                                        onChange={inputsHandler}
-                                        maxLength="10"
-                                    />
-                                    {errors.mob && (
-                                        <div className="text-danger">{errors.mob}</div>
-                                    )}
-                                </div>
-                                
-                                <div className='col-sm-3'>
-                                    <label className='form-label my-0'>Current address</label><span className="text-danger">*</span>
-                                    <textarea className='form-control'
-                                        type="text"
-                                        value={userForm.caddress}
-                                        onChange={handleCaddressChange}
-                                    />
-                                    {errors.caddress && (
-                                        <div className="text-danger">{errors.caddress}</div>
-                                    )}
-                                </div>
-                                <div className='col-sm-3'>
-                                    <div className='d-flex justify-content-between'>
-                                        <div>
-                                            <label className='form-label my-0'> Permanent address </label><span className="text-danger">*</span>
-                                        </div>
-                                        <div>
-                                            <input
-                                                type="checkbox"
-                                                checked={isChecked}
-                                                onChange={handleCheckboxChange}
-                                            />
-                                            <small className='ps-0 my-0'> Same as current address</small>
-                                        </div>
-                                    </div>
-                                    <textarea className='form-control'
-                                        type="text"
-                                        value={userForm.paddress}
-                                        onChange={handlePaddressChange}
-                                        disabled={isChecked}
-                                    />
-                                    {errors.paddress && (
-                                        <div className="text-danger">{errors.paddress}</div>
-                                    )}
-                                </div>
-                                <div className="col-sm-3">
-                                    <label className="form-label my-0">Email-id</label><span className="text-danger">*</span>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name="email"
-                                        value={userForm.email}
-                                        onChange={inputsHandler}
-                                    />
-                                    {errors.email && (
-                                        <div className="text-danger">{errors.email}</div>
-                                    )}
-                                </div>
-                                <div className="col-sm-3 ">
-                                    <label className="form-label my-0">Information</label><span className="text-danger">*</span>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name="info"
-                                        value={userForm.info}
-                                        onChange={inputsHandler}
-                                    />
-                                    {errors.info && (
-                                        <div className="text-danger">{errors.info}</div>
-                                    )}
-                                </div>
-                                {isVisibleStatus && (<div className="col-sm-4">
-                                    <label className='form-label my-0'>Status</label><span className='text-danger'>*</span>
-                                    <select
-                                        className="form-control"
-                                        value={userForm.status}
-                                        onChange={handleStatusChange} >
-                                        <option value="" disabled>Select status</option>
-                                        <option value="0" className="text-danger">Inactive</option>
-                                        <option value="1" className="text-primary">Active</option>
-                                    </select>
-                                </div>)}
-                            </div>
-                            <hr />
-                            <div>
-                                <p className='h6 pb-2 headigs'>User Login Details:</p>
-                                <div className='row'>
-                                    <div className='col-sm-3 mb-2'>
-                                        <label className='form-label my-0'>User Name</label>
-                                        <input type="text" className="form-control" name="uname" value={userForm.uname} onChange={inputsHandler} disabled />
-                                    </div>
-                                    <div className='col-sm-3'>
-                                        
-                                        <label className='form-label my-0'>Password</label><span className='text-danger'>*</span>
-                                        <div className="input-group">
+                        <div>
+                            <form>
+                                <div><p className='h6 pb-2 headigs'>Add New User Master Group:</p></div>
+                                <div className="row">
+                                    <div className="col-sm-3">
+                                        <label className="form-label my-0">Name</label><span className="text-danger">*</span>
                                         <input
-                                            type={showPassword ? "text" : "password"}
+                                            type="text"
                                             className="form-control"
-                                            name="password"
-                                            value={userForm.password}
+                                            name="name"
+                                            value={userForm.name}
                                             onChange={inputsHandler}
                                         />
-                                        <button
-                                            className="btn btn-outline-secondary"
-                                            type="button"
-                                            onClick={togglePasswordVisibility}
-                                        >
-                                                <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
-                                        </button>
-                                        </div>
-                                        {errors.password && (
-                                            <div className="text-danger">{errors.password}</div>
+                                        {errors.name && (
+                                            <div className="text-danger">{errors.name}</div>
                                         )}
                                     </div>
+                                    <div className="col-sm-3">
+                                        <label className="form-label my-0">Mobile number</label><span className="text-danger">*</span>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            name="mob"
+                                            value={userForm.mob}
+                                            onChange={inputsHandler}
+                                            maxLength="10"
+                                        />
+                                        {errors.mob && (
+                                            <div className="text-danger">{errors.mob}</div>
+                                        )}
+                                    </div>
+
+                                    <div className='col-sm-3'>
+                                        <label className='form-label my-0'>Current address</label><span className="text-danger">*</span>
+                                        <textarea className='form-control'
+                                            type="text"
+                                            value={userForm.caddress}
+                                            onChange={handleCaddressChange}
+                                        />
+                                        {errors.caddress && (
+                                            <div className="text-danger">{errors.caddress}</div>
+                                        )}
+                                    </div>
+                                    <div className='col-sm-3'>
+                                        <div className='d-flex justify-content-between'>
+                                            <div>
+                                                <label className='form-label my-0'> Permanent address </label><span className="text-danger">*</span>
+                                            </div>
+                                            <div>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={isChecked}
+                                                    onChange={handleCheckboxChange}
+                                                />
+                                                <small className='ps-0 my-0'> Same as current address</small>
+                                            </div>
+                                        </div>
+                                        <textarea className='form-control'
+                                            type="text"
+                                            value={userForm.paddress}
+                                            onChange={handlePaddressChange}
+                                            disabled={isChecked}
+                                        />
+                                        {errors.paddress && (
+                                            <div className="text-danger">{errors.paddress}</div>
+                                        )}
+                                    </div>
+                                    <div className="col-sm-3">
+                                        <label className="form-label my-0">Email-id</label><span className="text-danger">*</span>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            name="email"
+                                            value={userForm.email}
+                                            onChange={inputsHandler}
+                                        />
+                                        {errors.email && (
+                                            <div className="text-danger">{errors.email}</div>
+                                        )}
+                                    </div>
+                                    <div className="col-sm-3 ">
+                                        <label className="form-label my-0">Information</label><span className="text-danger">*</span>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            name="info"
+                                            value={userForm.info}
+                                            onChange={inputsHandler}
+                                        />
+                                        {errors.info && (
+                                            <div className="text-danger">{errors.info}</div>
+                                        )}
+                                    </div>
+                                    {isVisibleStatus && (<div className="col-sm-4">
+                                        <label className='form-label my-0'>Status</label><span className='text-danger'>*</span>
+                                        <select
+                                            className="form-control"
+                                            value={userForm.status}
+                                            onChange={handleStatusChange} >
+                                            <option value="" disabled>Select status</option>
+                                            <option value="0" className="text-danger">Inactive</option>
+                                            <option value="1" className="text-primary">Active</option>
+                                        </select>
+                                    </div>)}
                                 </div>
+                                <hr />
+                                <div>
+                                    <p className='h6 pb-2 headigs'>User Login Details:</p>
+                                    <div className='row'>
+                                        <div className='col-sm-3 mb-2'>
+                                            <label className='form-label my-0'>User Name</label>
+                                            <input type="text" className="form-control" name="uname" value={userForm.uname} onChange={inputsHandler} disabled />
+                                        </div>
+                                        <div className='col-sm-3'>
+
+                                            <label className='form-label my-0'>Password</label><span className='text-danger'>*</span>
+                                            <div className="input-group">
+                                                <input
+                                                    type={showPassword ? "text" : "password"}
+                                                    className="form-control"
+                                                    name="password"
+                                                    value={userForm.password}
+                                                    onChange={inputsHandler}
+                                                />
+                                                <button
+                                                    className="btn btn-outline-secondary"
+                                                    type="button"
+                                                    onClick={togglePasswordVisibility}
+                                                >
+                                                    <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
+                                                </button>
+                                            </div>
+                                            {errors.password && (
+                                                <div className="text-danger">{errors.password}</div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="py-2 text-end">
+                                    <button type="submit" onClick={addUser} className="btn btn-primary">
+                                        {selectedUser ? "Update" : "Submit"}
+                                    </button>
+                                </div>
+                            </form>
+                            <div>
+                                {successMsg && (<p className='text-center text-success'>{successMsg}
+                                </p>)}
                             </div>
-                            <div className="py-2 text-end">
-                                <button type="submit" onClick={addUser} className="btn btn-primary">
-                                    {selectedUser ? "Update" : "Submit"}
-                                </button>
-                            </div>
-                        </form>
+                        </div>
                     )}
                 </div>
                 <div className='card p-2 mt-2'>
@@ -574,14 +594,14 @@ function Users() {
                                             </td>
 
                                             <td className="text-center">
-                                              <div className="d-flex justify-content-center"> 
-                                                <p className="me-2 my-0 text-primary pointer" onClick={() => updateUser(user._id)}>
-                                                    <FontAwesomeIcon icon={faPenToSquare} />
-                                                </p>
+                                                <div className="d-flex justify-content-center">
+                                                    <p className="me-2 my-0 text-primary pointer" onClick={() => updateUser(user._id)}>
+                                                        <FontAwesomeIcon icon={faPenToSquare} />
+                                                    </p>
                                                     <p className="my-0 text-danger pointer"
-                                                    onClick={() => deleteUser(user._id)}>
-                                                    <FontAwesomeIcon icon={faTrashCan} />
-                                                </p>
+                                                        onClick={() => deleteUser(user._id)}>
+                                                        <FontAwesomeIcon icon={faTrashCan} />
+                                                    </p>
                                                 </div>
                                             </td>
                                         </tr>
