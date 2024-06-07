@@ -156,6 +156,7 @@ function CreateStudent() {
                     .get("http://localhost:4000/students/")
                     .then((res) => {
                         setUsergetForm(res.data.data);
+                        getStudent()
                     })
                     .catch((error) => {
                         console.log(error);
@@ -203,7 +204,7 @@ function CreateStudent() {
         <Layout>
             <div className="conatiner-fluid p-2">
                 <div className="form-wrapper card p-2">
-                        
+
                     <div className="d-flex justify-content-between" style={{ borderBottom: "1px solid red" }}>
                         <div className="">
                             <p className="h5 pb-2 my-0">Student Master</p>
