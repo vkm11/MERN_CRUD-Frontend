@@ -46,6 +46,12 @@ function CreateStudent() {
         setAddFormDiv(true)
         setSearchFormDiv(false)
         setStatus(false)
+        setUserForm({
+            name: "",
+            email: "",
+            rollno: "",
+            status: "1",
+        })
     }
     const searchDiv = () => {
         setAddFormDiv(false)
