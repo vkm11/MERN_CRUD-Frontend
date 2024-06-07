@@ -16,9 +16,9 @@ function Dashboard() {
     return (
         <Layout>
             <>
-                <div>
+                {/* <div>
                     <h5>Dashboard works here</h5>
-                </div>
+                </div> */}
                 <div style={containerStyle}>
                     <div className='text-center'>
                         <h3 style={{ fontSize: "-webkit-xxx-large", fontFamily: "serif", ...borderStyle}}>Welcome to Online School</h3>

@@ -54,4 +54,30 @@ ul li a:hover {
   background: #ffffff;
   font-size:xx-large ;
 }
+.no-border a {
+    text-decoration: none;
+}
+
+.b-border:hover{
+    color: orange !important;
+}
+
+.b-border {
+    display: inline-block;
+    text-decoration: none;
+   
+}
+
+.b-border::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #000;
+    transition: width .3s;
+}
+
+.b-border:hover::after {
+    width: 100%;
+}
 
