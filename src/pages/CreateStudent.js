@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../components/Layouts/Layout"
+import Layout from "../components/Layouts/Layout";
 import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan, faPenToSquare, faPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
@@ -14,13 +14,18 @@ function CreateStudent() {
     });
     const [usergetForm, setUsergetForm] = useState([]);
     const [errors, setErrors] = useState({});
-    const [selectedStudent, setSelectedStudent] = useState(null); // New state to hold selected student data
+    const [selectedStudent, setSelectedStudent] = useState(null);
     const [successMessage, setSuccessMessage] = useState("");
 
-    const [status, setStatus] = useState(false);
     const [addFormDiv, setAddFormDiv] = useState(true);
     const [searchFormDiv, setSearchFormDiv] = useState(false);
-    // const [students, setStudents] = useState([]);
+    const [statusDiv, setStatusDiv] = useState(false)
+
+
+    const [searchName, setSearchName] = useState("");
+    const [searchStatus, setSearchStatus] = useState('');
+    const [searchResult, setSearchResult] = useState([]);
+
     const [count, setCount] = useState(0);
 
     // pagination
@@ -29,8 +34,7 @@ function CreateStudent() {
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = usergetForm.slice(indexOfFirstItem, indexOfLastItem);
-
+    const currentItems = searchResult.slice(indexOfFirstItem, indexOfLastItem);
 
     // Change page
     const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
@@ -43,21 +47,22 @@ function CreateStudent() {
     };
 
     const addDiv = () => {
-        setAddFormDiv(true)
-        setSearchFormDiv(false)
-        setStatus(false)
+        setAddFormDiv(true);
+        setSearchFormDiv(false);
+        setSelectedStudent(null);
+        setStatusDiv(false)
         setUserForm({
             name: "",
             email: "",
             rollno: "",
             status: "1",
-        })
-    }
+        });
+    };
+
     const searchDiv = () => {
-        setAddFormDiv(false)
-        setSearchFormDiv(true)
-        setStatus(true)
-    }
+        setAddFormDiv(false);
+        setSearchFormDiv(true);
+    };
 
     const validateForm = () => {
         let isValid = true;
@@ -87,6 +92,7 @@ function CreateStudent() {
         setErrors(newErrors);
         return isValid;
     };
+
     const handleStatusChange = (e) => {
         setUserForm(prevState => ({
             ...prevState,
@@ -111,7 +117,7 @@ function CreateStudent() {
                         });
                         setErrors({});
                         setTimeout(() => {
-                            getStudent()
+                            getStudent();
                             setSuccessMessage("");
                         }, 1000);
                     })
@@ -133,14 +139,13 @@ function CreateStudent() {
                         setSelectedStudent(null);
                         setErrors({});
                         setTimeout(() => {
-                            addDiv()
-                            getStudent()
+                            addDiv();
+                            getStudent();
                             setSuccessMessage("");
                         }, 1000);
                     })
                     .catch((error) => {
                         console.error("Error:", error);
-
                     });
             }
         }
@@ -152,45 +157,40 @@ function CreateStudent() {
             .then(() => {
                 console.log("Data successfully deleted!");
                 setSuccessMessage("Student successfully deleted");
-                axios
-                    .get("http://localhost:4000/students/")
-                    .then((res) => {
-                        setUsergetForm(res.data.data);
-                        getStudent()
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-
+                getStudent();
                 setTimeout(() => {
                     setSuccessMessage("");
                 }, 1000);
             })
             .catch((error) => {
                 console.log(error);
-
             });
     };
+
     const getStudent = () => {
         axios
             .get("http://localhost:4000/students/")
             .then((res) => {
                 setUsergetForm(res.data.data);
+                setSearchResult(res.data.data);
                 const data = res.data.data;
                 setCount(data.length);
             })
             .catch((error) => {
                 console.log(error);
             });
-    }
+    };
+
     useEffect(() => {
-        getStudent()
+        getStudent();
     }, []);
 
     const updateStudent = (_id) => {
-        setStatus(true)
+        setSearchFormDiv(false);
+        setAddFormDiv(true);
         const selected = usergetForm.find((user) => user._id === _id);
         setSelectedStudent(selected);
+        setStatusDiv(true)
         setUserForm({
             name: selected.name,
             email: selected.email,
@@ -199,32 +199,70 @@ function CreateStudent() {
         });
     };
 
+    const handleSearch = () => {
+        if (searchName === "" && searchStatus === "") {
+            setSearchResult(usergetForm);
+        } else {
+            const filteredItems = usergetForm.filter((section) => {
+                const nameMatch = section.name.toLowerCase().includes(searchName.toLowerCase());
+                const statusMatch = searchStatus === "" || String(section.status) === searchStatus;
+                return nameMatch && statusMatch;
+            });
+            setSearchResult(filteredItems);
+        }
+    };
 
     return (
         <Layout>
-            <div className="conatiner-fluid p-2">
+            <div className="container-fluid p-2">
                 <div className="form-wrapper card p-2">
-
                     <div className="d-flex justify-content-between" style={{ borderBottom: "1px solid red" }}>
-                        <div className="">
+                        <div>
                             <p className="h5 pb-2 my-0">Student Master</p>
                         </div>
                         <div>
                             <button className="searchBtn me-1" onClick={searchDiv}>
-                                <FontAwesomeIcon icon={faMagnifyingGlass} />Search</button>
+                                <FontAwesomeIcon icon={faMagnifyingGlass} /> Search
+                            </button>
                             <button className="addBtn" onClick={addDiv}>
-                                <FontAwesomeIcon icon={faPlus} />Add</button>
+                                <FontAwesomeIcon icon={faPlus} /> Add
+                            </button>
                         </div>
                     </div>
                     <div>
                         {searchFormDiv && (
-                            <div>
-                                <p>Search works here</p>
+                            <div className="searchdiv">
+                                <div className="row">
+                                    <div className="col-sm-4 mb-3">
+                                        <label>Name</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Search by name"
+                                            value={searchName}
+                                            onChange={(e) => setSearchName(e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="col-sm-4">
+                                        <label className="form-label my-0">Status</label>
+                                        <select
+                                            className="form-control"
+                                            value={searchStatus}
+                                            onChange={(e) => setSearchStatus(e.target.value)}
+                                        >
+                                            <option value="">Select status</option>
+                                            <option value="0" className="text-danger">Inactive</option>
+                                            <option value="1" className="text-primary">Active</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="text-end py-2">
+                                    <button className="btn btn-primary" onClick={handleSearch}>Search</button>
+                                </div>
                             </div>
                         )}
                     </div>
                     <div>
-
                         {addFormDiv && (
                             <form>
                                 <div className="row">
@@ -233,151 +271,122 @@ function CreateStudent() {
                                         <input
                                             type="text"
                                             className="form-control"
+                                            placeholder="Enter your name"
                                             name="name"
-                                            id="name"
                                             value={userForm.name}
                                             onChange={inputsHandler}
                                         />
-                                        {errors.name && (
-                                            <div className="text-danger">{errors.name}</div>
-                                        )}
+                                        {errors.name && <div className="text-danger">{errors.name}</div>}
                                     </div>
                                     <div className="col-sm-3">
                                         <label className="form-label">Email</label><span className="text-danger">*</span>
                                         <input
-                                            type="text"
+                                            type="email"
                                             className="form-control"
+                                            placeholder="Enter your email"
                                             name="email"
-                                            id="email"
                                             value={userForm.email}
                                             onChange={inputsHandler}
                                         />
-                                        {errors.email && (
-                                            <div className="text-danger">{errors.email}</div>
-                                        )}
+                                        {errors.email && <div className="text-danger">{errors.email}</div>}
                                     </div>
                                     <div className="col-sm-3">
-                                        <label className="form-label">Roll no.</label><span className="text-danger">*</span>
+                                        <label className="form-label">Roll No</label><span className="text-danger">*</span>
                                         <input
-                                            type="text"
+                                            type="number"
                                             className="form-control"
+                                            placeholder="Enter your roll no"
                                             name="rollno"
-                                            id="rollno"
                                             value={userForm.rollno}
                                             onChange={inputsHandler}
                                         />
-                                        {errors.rollno && (
-                                            <div className="text-danger">{errors.rollno}</div>
-                                        )}
+                                        {errors.rollno && <div className="text-danger">{errors.rollno}</div>}
                                     </div>
-                                    {status && (<div className="col-sm-3">
-                                        <label className='form-label'>Status</label><span className="text-danger">*</span>
+                                    {statusDiv && (<div className="col-sm-3">
+                                        <label className="form-label">Status</label><span className="text-danger">*</span>
                                         <select
                                             className="form-control"
+                                            name="status"
                                             value={userForm.status}
                                             onChange={handleStatusChange}
                                         >
-                                            <option value="" disabled>Select status</option>
-                                            <option value="0" className="text-danger">Inactive</option>
                                             <option value="1" className="text-primary">Active</option>
+                                            <option value="0" className="text-danger">Inactive</option>
                                         </select>
-
                                     </div>
                                     )}
-
                                 </div>
-                                <div className="py-2">
-                                    {successMessage && (
-                                        <div className="alert alert-success py-0 my-0" role="alert">
-                                            <p className="text-center py-2 my-0">{successMessage}</p>
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="text-end py-0">
-                                    <button type="submit" onClick={addForm} className="btn btn-primary">
+                                <div className="d-flex justify-content-end pt-3">
+                                    <button className="btn btn-primary" onClick={addForm}>
                                         {selectedStudent ? "Update" : "Submit"}
                                     </button>
                                 </div>
+                                <div className="text-success text-center">{successMessage}</div>
                             </form>
                         )}
                     </div>
+                    <div>
 
-                </div>
-                <div className="card p-2 mt-2">
-                    <div className="table-responsive">
-                        <table className="table table-striped my-0 table-bordered table-hover">
-                            <thead className="table-dark">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Roll no</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col" className="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            {/* <tbody>
-                                {usergetForm.map((user, index) => {
-                                    return (
+                        <div className="mt-3">
+
+                            <table className="table table-bordered">
+                                <thead className="table-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Roll No</th>
+                                        <th className="text-center">Status</th>
+                                        <th className="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {currentItems.map((item, index) => (
                                         <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{user.name}</td>
-                                            <td>{user.email}</td>
-                                            <td>{user.rollno}</td>
+                                            <td>{indexOfFirstItem + index + 1}</td>
+                                            <td>{item.name}</td>
+                                            <td>{item.email}</td>
+                                            <td>{item.rollno}</td>
                                             <td className="text-center">
-                                                <button
-                                                    className="btn btn-primary btn-sm me-2" onClick={() => updateStudent(user._id)}>
-                                                    <FontAwesomeIcon icon={faPenToSquare} /> Edit
+                                                {item.status === 0 ? (
+                                                    <span className="badge rounded-pill text-bg-danger">Inactive</span>
+                                                ) : (
+                                                    <span className="badge rounded-pill text-bg-success">Active</span>
+                                                )}
+                                            </td>
+
+                                            <td className="text-center">
+                                                <button className="btn btn-primary btn-sm me-1" onClick={() => updateStudent(item._id)}>
+                                                    <FontAwesomeIcon icon={faPenToSquare} />
                                                 </button>
-                                                <button
-                                                    className="btn btn-danger btn-sm"
-                                                    onClick={() => deleteStudent(user._id)}>
-                                                    <FontAwesomeIcon icon={faTrashCan} /> Delete
+                                                <button className="btn btn-danger btn-sm" onClick={() => deleteStudent(item._id)}>
+                                                    <FontAwesomeIcon icon={faTrashCan} />
                                                 </button>
                                             </td>
                                         </tr>
-                                    );
-                                })}
-                            </tbody> */}
-                            <tbody>
-                                {currentItems.map((user, index) => (
-                                    <tr key={index}>
-                                        <td>{indexOfFirstItem + index + 1}</td>
-                                        <td>{user.name}</td>
-                                        <td>{user.email}</td>
-                                        <td>{user.rollno}</td>
-                                        <td>
-                                            <div className='text-center'>
-                                                {user.status === 1 ? <span className="badge rounded-pill text-bg-success">Active</span> : <span className="badge rounded-pill text-bg-danger">Inactive</span>}
-                                            </div>
-                                        </td>
-                                        <td className="text-center">
-                                            <button
-                                                className="btn btn-primary btn-sm me-2" onClick={() => updateStudent(user._id)}>
-                                                <FontAwesomeIcon icon={faPenToSquare} /> Edit
-                                            </button>
-                                            <button
-                                                className="btn btn-danger btn-sm"
-                                                onClick={() => deleteStudent(user._id)}>
-                                                <FontAwesomeIcon icon={faTrashCan} /> Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <div className="d-flex justify-content-between">
-                            <Pagination
-                                activePage={currentPage}
-                                itemsCountPerPage={itemsPerPage}
-                                totalItemsCount={usergetForm.length}
-                                pageRangeDisplayed={3}
-                                onChange={handlePageChange}
-                                itemClass="page-item"
-                                linkClass="page-link"
-                            />
-                            <span className="">Total Students: {count}</span>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <div className="d-flex justify-content-between">
+                                <div>
+                                    <Pagination
+                                        activePage={currentPage}
+                                        itemsCountPerPage={itemsPerPage}
+                                        totalItemsCount={searchResult.length}
+                                        pageRangeDisplayed={5}
+                                        onChange={handlePageChange}
+                                        itemClass="page-item"
+                                        linkClass="page-link"
+                                        firstPageText="First"
+                                        lastPageText="Last"
+                                    />
+                                </div>
+                                <p>
+                                    Total students - <b>{count}</b>
+                                </p>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>

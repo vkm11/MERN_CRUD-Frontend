@@ -7,7 +7,7 @@ function Dashboard() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '60vh'
+        height: '60vh',
     };
     const borderStyle = {
         color: 'red',
@@ -20,7 +20,7 @@ function Dashboard() {
                     <h5>Dashboard works here</h5>
                 </div> */}
                 <div style={containerStyle}>
-                    <div className='text-center'>
+                    <div className='text-center'>    
                         <h3 style={{ fontSize: "-webkit-xxx-large", fontFamily: "serif", ...borderStyle}}>Welcome to Online School</h3>
                     </div>
                 </div>

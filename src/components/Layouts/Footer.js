@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from "react-router-dom"
 function Footer() {
     const footerStyle = {
-        background: 'linear-gradient(#ba89df, rgb(53 109 237))',
+        background: 'linear-gradient(#060d8d66, #2874ec66)',
         padding: '10px'
     }
 

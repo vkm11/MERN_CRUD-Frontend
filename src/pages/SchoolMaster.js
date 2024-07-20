@@ -6,7 +6,7 @@ import { faTrashCan, faPenToSquare, faMagnifyingGlass, faPlus } from '@fortaweso
 import Pagination from "react-js-pagination";
 // import { format } from 'date-fns';
 import { format, parseISO } from 'date-fns';
-
+import Swal from 'sweetalert2';
 
 
 function CreateSchool() {
@@ -15,6 +15,7 @@ function CreateSchool() {
         class: "",
         desc: "",
         startdate: "",
+        status: "1"
     });
     const [usergetForm, setUsergetForm] = useState([]);
     const [errors, setErrors] = useState({});
@@ -28,6 +29,7 @@ function CreateSchool() {
     const [showSearchForm, setShowSearchForm] = useState(false);
     const [showSchoolForm, setShowSchoolForm] = useState(true);
     const [successMsg, setSuccessMsg] = useState(false);
+    const [statusDiv, setStatusDiv] = useState(false)
 
     const toggleSearchForm = () => {
         setShowSearchForm(!showSearchForm);
@@ -37,20 +39,22 @@ function CreateSchool() {
             name: "",
             class: "",
             desc: "",
-            startdate: ""
+            startdate: "",
+            status: "",
         });
     };
 
     const toggleSchoolForm = () => {
         setShowSchoolForm(!showSchoolForm);
-
+        setStatusDiv(false)
         setShowSchoolForm(true);
         setShowSearchForm(false);
         setUserForm({
             name: "",
             class: "",
             desc: "",
-            startdate: ""
+            startdate: "",
+            status: "1"
         });
     };
 
@@ -133,6 +137,7 @@ function CreateSchool() {
                             class: "",
                             desc: "",
                             startdate: "",
+                            status: "1",
                         });
                         setErrors({});
                         setTimeout(() => {
@@ -145,21 +150,40 @@ function CreateSchool() {
                         console.error("Error:", error);
                     });
             } else {
+                Swal.fire({
+                    title:"Are you sure",
+                    text: "you want to update the school",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, update it!',
+                    cancelButtonText: 'No, cancel!'
+               
+            }).then((result) => {
+                if (result.isConfirmed) {
                 axios
                     .put(`http://localhost:4000/school/update-school/${selectedSchool._id}`, userForm)
                     .then((res) => {
                         console.log(res.data);
                         setSuccessMsg(res.data.msg)
+                        Swal.fire(
+                            "Updated",
+                            "the school was successfully updated",
+                            'success'
+                        )
                         setUserForm({
                             name: "",
                             class: "",
                             desc: "",
                             startdate: "",
+                            status: ""
                         });
                         setSelectedSchool(null);
                         setErrors({});
                         // window.location.reload();
                         setTimeout(() => {
+                            setStatusDiv(false)
                             setSuccessMsg('')
                             getSchoolData()
                         }, 1000)
@@ -167,24 +191,65 @@ function CreateSchool() {
                     .catch((error) => {
                         console.error("Error:", error);
                     });
+                }
+            });
             }
         }
     };
 
+    // const deleteSchool = (_id) => {
+    //     axios
+    //         .delete("http://localhost:4000/school/delete-school/" + _id)
+    //         .then((res) => {
+    //             console.log("Data successfully deleted!");
+    //             setSuccessMsg(res.data.msg)
+    //             setTimeout(() => {
+    //                 getSchoolData()
+    //                 setSuccessMsg('')
+    //             }, 1000)
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // };
+
     const deleteSchool = (_id) => {
-        axios
-            .delete("http://localhost:4000/school/delete-school/" + _id)
-            .then((res) => {
-                console.log("Data successfully deleted!");
-                setSuccessMsg(res.data.msg)
-                setTimeout(() => {
-                    getSchoolData()
-                    setSuccessMsg('')
-                }, 1000)
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios
+                    .delete("http://localhost:4000/school/delete-school/" + _id)
+                    .then((res) => {
+                        console.log("Data successfully deleted!");
+                        setSuccessMsg(res.data.msg);
+                        Swal.fire(
+                            'Deleted!',
+                            'The school has been deleted.',
+                            'success'
+                        );
+                        setTimeout(() => {
+                            getSchoolData();
+                            setSuccessMsg('');
+                        }, 1000);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        Swal.fire(
+                            'Error!',
+                            'There was a problem deleting the school.',
+                            'error'
+                        );
+                    });
+            }
+        });
     };
     const getSchoolData = () => {
         axios
@@ -228,14 +293,22 @@ function CreateSchool() {
         setSelectedSchool(selected);
         setShowSchoolForm(true);
         setShowSearchForm(false);
+        setStatusDiv(true)
         setUserForm({
             name: selected.name,
             class: selected.class,
             desc: selected.desc,
+            status: String(selected.status),
             startdate: selected.startdate.substring(0, 10),
         });
     };
 
+    const handleStatusChange = (e) => {
+        setUserForm(prevState => ({
+            ...prevState,
+            status: e.target.value
+        }));
+    }; 
     const formatDateTime = (dateString) => {
         try {
             if (!dateString) {
@@ -341,7 +414,7 @@ function CreateSchool() {
 
                                 </div>
                                 <div className="col-sm-3 mb-3">
-                                    <label className="form-label my-0">Start date</label>
+                                    <label className="form-label my-0">Start date</label><span className="text-danger">*</span>
                                     <input
                                         type="date"
                                         className="form-control"
@@ -354,6 +427,23 @@ function CreateSchool() {
                                         <div className="text-danger">{errors.startdate}</div>
                                     )}
                                 </div>
+                                {statusDiv && (<div className="col-sm-3 mb-3">
+                                    <label className="form-label">Status</label><span className="text-danger">*</span>
+                                    <select
+                                        className='form-control'
+                                        name='status'
+                                        value={userForm.status}
+                                        onChange={handleStatusChange}
+                                    >
+                                        <option value='' disabled>Select status</option>
+                                        <option value='0' className='text-danger'>Inactive</option>
+                                        <option value='1' className='text-primary'>Active</option>
+                                    </select>
+                                    {errors.status && (
+                                        <div className="text-danger">{errors.status}</div>
+                                    )}
+                                </div>
+                                )}
 
                             </div>
                             <div className="py-2 text-end">
@@ -380,6 +470,7 @@ function CreateSchool() {
                                         <th scope="col">Class</th>
                                         <th scope="col">Description</th>
                                         <th scope="col">Start date</th>
+                                        <th scope="col">Status</th>
                                         <th scope="col" className="text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -413,6 +504,11 @@ function CreateSchool() {
                                             <td>{user.name}</td>
                                             <td>{user.class}</td>
                                             <td>{user.desc}</td>
+                                            <td>
+                                                <div className='text-center'>
+                                                    {user.status === 1 ? <span className="badge rounded-pill text-bg-success">Active</span> : <span className="badge rounded-pill text-bg-danger">Inactive</span>}
+                                                </div>
+                                            </td>
                                             <td>{formatDateTime(user.startdate)}</td>
                                             <td className="text-center">
                                                 <button

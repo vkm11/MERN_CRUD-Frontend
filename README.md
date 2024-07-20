@@ -19,3 +19,9 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 npm install react-js-pagination
 
 import Pagination from "react-js-pagination";
+
+## Sweetalert
+npm install sweetalert2
+
+import Swal from 'sweetalert2';
+
