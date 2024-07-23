@@ -9,6 +9,7 @@ import CreateUsers from "./pages/Users";
 import CreateParent from "./pages/Parents";
 import CreateRole from "./pages/Roles";
 import CreateSection from "./pages/Section"
+import Teacher from "./pages/Teacher";
 function App() {
   return (
     <div className="App">
@@ -43,6 +44,7 @@ function App() {
             <Route exact path="/create-parent" element={<CreateParent />} />
             <Route exact path="/create-role" element={<CreateRole />} />
             <Route exact path="/create-section" element={<CreateSection />} />
+            <Route exact path="/teacher" element={<Teacher />} />
           </Routes>
         </div>
       </div>

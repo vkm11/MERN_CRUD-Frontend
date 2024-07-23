@@ -4,30 +4,20 @@ import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan, faPenToSquare, faPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import Pagination from "react-js-pagination";
-
-function CreateStudent() {
-    const [userForm, setUserForm] = useState({
-        name: "",
-        email: "",
-        rollno: "",
-        status: "1",
-    });
-    const [usergetForm, setUsergetForm] = useState([]);
-    const [errors, setErrors] = useState({});
-    const [selectedStudent, setSelectedStudent] = useState(null);
+function Teacher() {
+    const [selectedTeacher, setSelectedTeacher] = useState(null);
     const [successMessage, setSuccessMessage] = useState("");
 
     const [addFormDiv, setAddFormDiv] = useState(true);
     const [searchFormDiv, setSearchFormDiv] = useState(false);
     const [statusDiv, setStatusDiv] = useState(false)
 
-
     const [searchName, setSearchName] = useState("");
     const [searchStatus, setSearchStatus] = useState('');
     const [searchResult, setSearchResult] = useState([]);
-
+    const [usergetForm, setUsergetForm] = useState([]);
+    const [errors, setErrors] = useState({});
     const [count, setCount] = useState(0);
-
     // pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
@@ -46,22 +36,33 @@ function CreateStudent() {
         }));
     };
 
+    const [userForm, setUserForm] = useState({
+        name: "",
+        email: "",
+        subject: "",
+        teacherid: "",
+        status: "1",
+    });
+
+
     const addDiv = () => {
-        setAddFormDiv(true);
-        setSearchFormDiv(false);
-        setSelectedStudent(null);
+        setSearchFormDiv(false)
+        setAddFormDiv(true)
         setStatusDiv(false)
+        setSelectedTeacher(null);
         setUserForm({
             name: "",
             email: "",
-            rollno: "",
+            subject: "",
+            teacherid: "",
             status: "1",
         });
     };
 
     const searchDiv = () => {
-        setAddFormDiv(false);
-        setSearchFormDiv(true);
+        setSearchFormDiv(true)
+        setAddFormDiv(false)
+        setStatusDiv(true)
     };
 
     const validateForm = () => {
@@ -73,7 +74,7 @@ function CreateStudent() {
             isValid = false;
         }
         if (!userForm.subject.trim()) {
-            newErrors.subject = "subject is required";
+            newErrors.subject = "Subject is required";
             isValid = false;
         }
 
@@ -86,10 +87,10 @@ function CreateStudent() {
         }
 
         if (typeof userForm.teacherid === 'string' && !userForm.teacherid.trim()) {
-            newErrors.teacherid = "TecaherId is required";
+            newErrors.teacherid = "Teacher-id is required";
             isValid = false;
         } else if (isNaN(userForm.teacherid)) {
-            newErrors.teacherid = "Please enter a valid TecaherId";
+            newErrors.teacherid = "Please enter a valid Teacher-id";
             isValid = false;
         }
 
@@ -107,21 +108,22 @@ function CreateStudent() {
     const addForm = (e) => {
         e.preventDefault();
         if (validateForm()) {
-            if (!selectedStudent) {
+            if (!selectedTeacher) {
                 axios
-                    .post("http://localhost:4000/students/create-student", userForm)
+                    .post("http://localhost:4000/teacher/create-teacher", userForm)
                     .then((res) => {
                         console.log(res.data);
                         setSuccessMessage(res.data.message);
                         setUserForm({
                             name: "",
                             email: "",
-                            rollno: "",
+                            subject: "",
+                            teacherid: "",
                             status: "1"
                         });
                         setErrors({});
                         setTimeout(() => {
-                            getStudent();
+                            getTeacher();
                             setSuccessMessage("");
                         }, 1000);
                     })
@@ -130,21 +132,22 @@ function CreateStudent() {
                     });
             } else {
                 axios
-                    .put(`http://localhost:4000/students/update-student/${selectedStudent._id}`, userForm)
+                    .put(`http://localhost:4000/teacher/update-teacher/${selectedTeacher._id}`, userForm)
                     .then((res) => {
                         console.log(res.data);
-                        setSuccessMessage("Student successfully updated");
+                        setSuccessMessage("Teacher successfully updated");
                         setUserForm({
                             name: "",
                             email: "",
-                            rollno: "",
+                            subject: "",
+                            teacherid: "",
                             status: ""
                         });
-                        setSelectedStudent(null);
+                        setSelectedTeacher(null);
                         setErrors({});
                         setTimeout(() => {
                             addDiv();
-                            getStudent();
+                            getTeacher();
                             setSuccessMessage("");
                         }, 1000);
                     })
@@ -154,26 +157,9 @@ function CreateStudent() {
             }
         }
     };
-
-    const deleteStudent = (_id) => {
+    const getTeacher = () => {
         axios
-            .delete("http://localhost:4000/students/delete-student/" + _id)
-            .then(() => {
-                console.log("Data successfully deleted!");
-                setSuccessMessage("Student successfully deleted");
-                getStudent();
-                setTimeout(() => {
-                    setSuccessMessage("");
-                }, 1000);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
-
-    const getStudent = () => {
-        axios
-            .get("http://localhost:4000/students/")
+            .get("http://localhost:4000/teacher/")
             .then((res) => {
                 setUsergetForm(res.data.data);
                 setSearchResult(res.data.data);
@@ -186,23 +172,39 @@ function CreateStudent() {
     };
 
     useEffect(() => {
-        getStudent();
+        getTeacher();
     }, []);
-
-    const updateStudent = (_id) => {
-        setSearchFormDiv(false);
-        setAddFormDiv(true);
-        const selected = usergetForm.find((user) => user._id === _id);
-        setSelectedStudent(selected);
+    const updateTeacher = (_id) => {
+        setSearchFormDiv(false)
+        setAddFormDiv(true)
         setStatusDiv(true)
+        const selected = usergetForm.find((user) => user._id === _id);
+        setSelectedTeacher(selected);
+       
         setUserForm({
             name: selected.name,
             email: selected.email,
-            rollno: selected.rollno,
+            subject: selected.subject,
+            teacherid: selected.teacherid,
             status: String(selected.status),
         });
     };
 
+    const deleteTeacher = (_id) => {
+        axios
+            .delete("http://localhost:4000/teacher/delete-teacher/" + _id)
+            .then(() => {
+                console.log("Data successfully deleted!");
+                setSuccessMessage("Teacher successfully deleted");
+                getTeacher();
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 1000);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
     const handleSearch = () => {
         if (searchName === "" && searchStatus === "") {
             setSearchResult(usergetForm);
@@ -222,7 +224,7 @@ function CreateStudent() {
                 <div className="form-wrapper card p-2">
                     <div className="d-flex justify-content-between" style={{ borderBottom: "1px solid red" }}>
                         <div>
-                            <p className="h5 pb-2 my-0">Student Master</p>
+                            <p className="h5 pb-2 my-0">Teacher Master</p>
                         </div>
                         <div>
                             <button className="searchBtn me-1" onClick={searchDiv}>
@@ -233,41 +235,40 @@ function CreateStudent() {
                             </button>
                         </div>
                     </div>
-                    <div>
-                        {searchFormDiv && (
-                            <div className="searchdiv">
-                                <div className="row">
-                                    <div className="col-sm-4 mb-3">
-                                        <label>Name</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="Search by name"
-                                            value={searchName}
-                                            onChange={(e) => setSearchName(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <label className="form-label my-0">Status</label>
-                                        <select
-                                            className="form-control"
-                                            value={searchStatus}
-                                            onChange={(e) => setSearchStatus(e.target.value)}
-                                        >
-                                            <option value="">Select status</option>
-                                            <option value="0" className="text-danger">Inactive</option>
-                                            <option value="1" className="text-primary">Active</option>
-                                        </select>
-                                    </div>
+                    {searchFormDiv && (
+                        <div className="searchdiv">
+                            <div className="row">
+                                <div className="col-sm-4 mb-3">
+                                    <label>Name</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Search by name"
+                                        value={searchName}
+                                        onChange={(e) => setSearchName(e.target.value)}
+                                    />
                                 </div>
-                                <div className="text-end py-2">
-                                    <button className="btn btn-primary" onClick={handleSearch}>Search</button>
+                                <div className="col-sm-4">
+                                    <label className="form-label my-0">Status</label>
+                                    <select
+                                        className="form-control"
+                                        value={searchStatus}
+                                        onChange={(e) => setSearchStatus(e.target.value)}
+                                    >
+                                        <option value="">Select status</option>
+                                        <option value="0" className="text-danger">Inactive</option>
+                                        <option value="1" className="text-primary">Active</option>
+                                    </select>
                                 </div>
                             </div>
-                        )}
-                    </div>
-                    <div>
-                        {addFormDiv && (
+                            <div className="text-end py-2">
+                                <button className="btn btn-primary" onClick={handleSearch}>Search</button>
+                            </div>
+                        </div>
+                    )}
+                    {addFormDiv && (
+                    <div className="addformdiv">
+                          
                             <form>
                                 <div className="row">
                                     <div className="col-sm-3">
@@ -282,6 +283,7 @@ function CreateStudent() {
                                         />
                                         {errors.name && <div className="text-danger">{errors.name}</div>}
                                     </div>
+
                                     <div className="col-sm-3">
                                         <label className="form-label">Email</label><span className="text-danger">*</span>
                                         <input
@@ -294,19 +296,31 @@ function CreateStudent() {
                                         />
                                         {errors.email && <div className="text-danger">{errors.email}</div>}
                                     </div>
+                                <div className="col-sm-3">
+                                    <label className="form-label">Subject</label><span className="text-danger">*</span>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Enter your Subject"
+                                        name="subject"
+                                        value={userForm.subject}
+                                        onChange={inputsHandler}
+                                    />
+                                    {errors.subject && <div className="text-danger">{errors.subject}</div>}
+                                </div>
                                     <div className="col-sm-3">
-                                        <label className="form-label">Roll No</label><span className="text-danger">*</span>
+                                        <label className="form-label">Teacher Id</label><span className="text-danger">*</span>
                                         <input
                                             type="number"
                                             className="form-control"
-                                            placeholder="Enter your roll no"
-                                            name="rollno"
-                                            value={userForm.rollno}
+                                            placeholder="Enter your Teacher id"
+                                        name="teacherid"
+                                        value={userForm.teacherid}
                                             onChange={inputsHandler}
                                         />
-                                        {errors.rollno && <div className="text-danger">{errors.rollno}</div>}
+                                    {errors.teacherid && <div className="text-danger">{errors.teacherid}</div>}
                                     </div>
-                                    {statusDiv && (<div className="col-sm-3">
+                                    {( statusDiv && <div className="col-sm-3">
                                         <label className="form-label">Status</label><span className="text-danger">*</span>
                                         <select
                                             className="form-control"
@@ -322,13 +336,13 @@ function CreateStudent() {
                                 </div>
                                 <div className="d-flex justify-content-end pt-3">
                                     <button className="btn btn-primary" onClick={addForm}>
-                                        {selectedStudent ? "Update" : "Submit"}
+                                        {selectedTeacher ? "Update" : "Submit"}
                                     </button>
                                 </div>
                                 <div className="text-success text-center">{successMessage}</div>
                             </form>
-                        )}
                     </div>
+                    )}
                     <div>
 
                         <div className="mt-3">
@@ -339,7 +353,8 @@ function CreateStudent() {
                                         <th>#</th>
                                         <th>Name</th>
                                         <th>Email</th>
-                                        <th>Roll No</th>
+                                        <th>Subject</th>
+                                        <th>Teacher-id</th>
                                         <th className="text-center">Status</th>
                                         <th className="text-center">Action</th>
                                     </tr>
@@ -350,7 +365,8 @@ function CreateStudent() {
                                             <td>{indexOfFirstItem + index + 1}</td>
                                             <td>{item.name}</td>
                                             <td>{item.email}</td>
-                                            <td>{item.rollno}</td>
+                                            <td>{item.subject}</td>
+                                            <td>{item.teacherid}</td>
                                             <td className="text-center">
                                                 {item.status === 0 ? (
                                                     <span className="badge rounded-pill text-bg-danger">Inactive</span>
@@ -360,10 +376,10 @@ function CreateStudent() {
                                             </td>
 
                                             <td className="text-center">
-                                                <button className="btn btn-primary btn-sm me-1" onClick={() => updateStudent(item._id)}>
+                                                <button className="btn btn-primary btn-sm me-1" onClick={() => updateTeacher(item._id)}>
                                                     <FontAwesomeIcon icon={faPenToSquare} />
                                                 </button>
-                                                <button className="btn btn-danger btn-sm" onClick={() => deleteStudent(item._id)}>
+                                                <button className="btn btn-danger btn-sm" onClick={() => deleteTeacher(item._id)}>
                                                     <FontAwesomeIcon icon={faTrashCan} />
                                                 </button>
                                             </td>
@@ -386,7 +402,7 @@ function CreateStudent() {
                                     />
                                 </div>
                                 <p>
-                                    Total students - <b>{count}</b>
+                                    Total Teacher - <b>{count}</b>
                                 </p>
                             </div>
                         </div>
@@ -395,7 +411,6 @@ function CreateStudent() {
                 </div>
             </div>
         </Layout>
-    );
+    )
 }
-
-export default CreateStudent;
+export default Teacher
