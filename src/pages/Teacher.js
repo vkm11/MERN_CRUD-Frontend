@@ -69,8 +69,11 @@ function Teacher() {
         let isValid = true;
         const newErrors = {};
 
-        if (!userForm.name.trim()) {
+        if (!userForm.name || !userForm.name.trim()) {
             newErrors.name = "Name is required";
+            isValid = false;
+        } else if (!/^[A-Z]/.test(userForm.name.trim())) {
+            newErrors.name = "Name should start with a capital letter";
             isValid = false;
         }
         if (!userForm.subject.trim()) {
