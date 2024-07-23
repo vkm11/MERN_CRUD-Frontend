@@ -72,10 +72,6 @@ function CreateStudent() {
             newErrors.name = "Name is required";
             isValid = false;
         }
-        if (!userForm.subject.trim()) {
-            newErrors.subject = "subject is required";
-            isValid = false;
-        }
 
         if (!userForm.email.trim()) {
             newErrors.email = "Email is required";
@@ -85,11 +81,11 @@ function CreateStudent() {
             isValid = false;
         }
 
-        if (typeof userForm.teacherid === 'string' && !userForm.teacherid.trim()) {
-            newErrors.teacherid = "TecaherId is required";
+        if (typeof userForm.rollno === 'string' && !userForm.rollno.trim()) {
+            newErrors.rollno = "Roll number is required";
             isValid = false;
-        } else if (isNaN(userForm.teacherid)) {
-            newErrors.teacherid = "Please enter a valid TecaherId";
+        } else if (isNaN(userForm.rollno)) {
+            newErrors.rollno = "Please enter a valid roll number";
             isValid = false;
         }
 
