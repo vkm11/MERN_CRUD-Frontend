@@ -10,7 +10,10 @@ import CreateParent from "./pages/Parents";
 import CreateRole from "./pages/Roles";
 import CreateSection from "./pages/Section"
 import Teacher from "./pages/Teacher";
+import Login from "./auth/Login";
+import Register from "./auth/Register";
 function App() {
+  
   return (
     <div className="App">
       {/* <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -37,7 +40,9 @@ function App() {
       <div className="conatiner-fluid">
         <div className="wrapper">
           <Routes>
-            <Route exact path="/" element={<Dashboard />} />
+            <Route exact path="/" element={<Login />} />
+            <Route exact path="/register" element={<Register />} />
+            <Route exact path="/dashboard" element={<Dashboard />} />
             <Route exact path="/create-student" element={<CreateStudent />} />
             <Route exact path="/create-school" element={<CreateSchool />} />
             <Route exact path="/create-user" element={<CreateUsers />} />

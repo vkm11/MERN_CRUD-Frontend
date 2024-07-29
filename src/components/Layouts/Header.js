@@ -51,7 +51,7 @@ function Header() {
                         {/* <Link to='/' className="navbar-brand" >    Ecommerce App</Link> */}
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <NavLink to='/' className="nav-link text-light py-1">Home</NavLink>
+                                <NavLink to='/dashboard' className="nav-link text-light py-1">Home</NavLink>
                             </li>
                             {/* <div className="dropdown nav-item">
                                 <a className="btn nav-link text-light dropdown-toggle py-1"  role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -111,7 +111,7 @@ function Header() {
                                 <NavLink to='/register' className="nav-link text-light" >SignUp</NavLink>
                             </li> */}
                             <li className="nav-item">
-                                <NavLink to='/signin' className="nav-link text-light py-1" >SignIn</NavLink>
+                                <NavLink to='/' className="nav-link text-light py-1" >SignIn</NavLink>
                             </li>
                             <li className="nav-item">
                                 <NavLink to='/signin' className="nav-link text-light py-1" >Logout</NavLink>

@@ -14,6 +14,9 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons';
       <FontAwesomeIcon icon={faCoffee} />
       </div>
 
+## React icons
+npm install react-icons --save
+npm install react-icons/fa --save
 
 ## Pagination
 npm install react-js-pagination
@@ -24,4 +27,5 @@ import Pagination from "react-js-pagination";
 npm install sweetalert2
 
 import Swal from 'sweetalert2';
+
 

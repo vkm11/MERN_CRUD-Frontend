@@ -1,17 +1,77 @@
-import React from 'react'
+// import React from 'react'
+// import Footer from './Footer';
+// import Header from './Header';
+// const Layout = (props) => {
+
+//     return (
+//         <>
+//             <div>
+//                 <Header />
+//                 <main className='min-vh-78'>
+//                     {props.children}
+//                 </main>
+//                 <Footer />
+//             </div>
+//         </>
+//     )
+// }
+
+// export default Layout;
+
+import React, { useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Footer from './Footer';
 import Header from './Header';
+import axios from 'axios';
+
 const Layout = (props) => {
+    const navigate = useNavigate();
+
+    // Memoize the checkTokenValidity function
+    const checkTokenValidity = useCallback(async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                navigate('/');
+                return;
+            }
+
+            const apiUrl = "http://localhost:4000/auth/verify-token";
+            await axios.get(apiUrl, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+        } catch (error) {
+            if (error.response?.status === 401) {
+                // Token is expired or invalid
+                window.alert('Session expired. Please log in again.');
+                localStorage.removeItem('token');
+                localStorage.removeItem('loginForm');
+                setTimeout(() => {
+                    navigate('/'); // Redirect to login after showing alert
+                }, 2000); // Delay the redirect to allow the alert to be seen
+            } else {
+                // Handle other errors if needed
+                window.alert('An error occurred. Please try again.');
+            }
+        }
+    }, [navigate]);
+
+    // Run token validation check on component mount
+    useEffect(() => {
+        checkTokenValidity();
+    }, [checkTokenValidity]);
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-            <Header />
-            <main style={{ flex: 1, minHeight: 0, height: "100%", overflowY: "auto" }}>
-                {props.children}
-            </main>
-            <Footer />
-        </div>
-    )
+        <>
+            <div>
+                <Header />
+                <main className='min-vh-78'>
+                    {props.children}
+                </main>
+                <Footer />
+            </div>
+        </>
+    );
 }
 
 export default Layout;
