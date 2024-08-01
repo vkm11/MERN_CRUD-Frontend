@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Layout from "../components/Layouts/Layout"
+import Layout from "../../components/AdminLayouts/Layout"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan, faPenToSquare, faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Pagination from "react-js-pagination";

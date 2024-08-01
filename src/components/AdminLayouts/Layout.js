@@ -24,7 +24,7 @@ import Footer from './Footer';
 import Header from './Header';
 import axios from 'axios';
 
-const Layout = (props) => {
+function Layout({ children }) {
     const navigate = useNavigate();
 
     // Memoize the checkTokenValidity function
@@ -66,7 +66,7 @@ const Layout = (props) => {
             <div>
                 <Header />
                 <main className='min-vh-78'>
-                    {props.children}
+                    {children}
                 </main>
                 <Footer />
             </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Layout from "../components/Layouts/Layout";
+import Layout from "../../components/AdminLayouts/Layout";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faPlus, faPenToSquare, faTrashCan, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";

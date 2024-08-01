@@ -98,7 +98,7 @@ function Header() {
                         {/* <Link to='/' className="navbar-brand" >    Ecommerce App</Link> */}
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <NavLink to='/dashboard' className="nav-link text-light py-1">Home</NavLink>
+                                <NavLink to='/admin-dashboard' className="nav-link text-light py-1">Home</NavLink>
                             </li>
                             <div className="dropdown nav-item">
                                 <button className="btn nav-link text-light dropdown-toggle py-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

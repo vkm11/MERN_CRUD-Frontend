@@ -34,10 +34,10 @@ function Login() {
                 setErrorMessage('Session expired. Please log in again.');
                 localStorage.removeItem('token');
                 localStorage.removeItem('loginForm');
-                setTimeout(()=>{
+                setTimeout(() => {
                     navigate('/')
                     setErrorMessage('')
-                },1000)
+                }, 1000)
             } else {
                 // Handle other errors if needed
                 setErrorMessage('An error occurred. Please try again.');
@@ -71,55 +71,95 @@ function Login() {
         setRememberMe(e.target.checked);
     };
 
+
+    /* Old Code */
     // const handleSubmit = async (e) => {
     //     e.preventDefault();
 
     //     try {
     //         const apiUrl = "http://localhost:4000/auth/login";
     //         const response = await axios.post(apiUrl, loginForm);
-    //         const { token } = response.data;
+    //         const { token, name } = response.data;
 
-    //         setSuccessMessage("Successfully logged in");
+    //         setSuccessMessage("Login Successfully");
     //         setLoginForm(clearForm);
     //         if (rememberMe) {
     //             localStorage.setItem('loginForm', JSON.stringify(loginForm));
-    //             localStorage.setItem('token', token); 
+    //             localStorage.setItem('token', token); // Save the token as well
+    //             localStorage.setItem('name', name); // Save the user's name
     //         } else {
     //             localStorage.removeItem('loginForm');
-    //             localStorage.setItem('token', token); 
+    //             localStorage.setItem('token', token); // Save the token if not remembered
+    //             localStorage.setItem('name', name); // Save the user's name
     //         }
     //         setTimeout(() => {
-    //             navigate("/dashboard");
+    //             navigate("/user-dashboard");
     //             setSuccessMessage("");
     //         }, 2000);
 
-    //         console.log(response.data); // example usage
-
     //     } catch (error) {
     //         setErrorMessage(error.response?.data?.msg || 'Login failed');
+    //         setTimeout(() => {
+    //             setErrorMessage('');
+    //         }, 1000)
     //     }
     // };
+
+    /* new code     */
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const localStoragedata = localStorage.getItem('loginForm');
+        if (localStoragedata) {
+            const loginForm = JSON.parse(localStoragedata);
+            const role = loginForm.role
+            console.log(role)
+        } else {
+            console.log('No login form data found in localStorage.');
+        }
 
         try {
             const apiUrl = "http://localhost:4000/auth/login";
             const response = await axios.post(apiUrl, loginForm);
-            const { token, name } = response.data;
-
+            const { token, name, role } = response.data;
             setSuccessMessage("Login Successfully");
+
             setLoginForm(clearForm);
+
+
             if (rememberMe) {
                 localStorage.setItem('loginForm', JSON.stringify(loginForm));
-                localStorage.setItem('token', token); // Save the token as well
-                localStorage.setItem('name', name); // Save the user's name
+                localStorage.setItem('token', token);
+                localStorage.setItem('name', name);
             } else {
                 localStorage.removeItem('loginForm');
-                localStorage.setItem('token', token); // Save the token if not remembered
-                localStorage.setItem('name', name); // Save the user's name
+                localStorage.setItem('token', token);
+                localStorage.setItem('name', name);
             }
+
             setTimeout(() => {
-                navigate("/dashboard");
+                // switch (role) {
+                //     case 1:
+                //         navigate("/admin-dashboard");
+                //         break;
+                //     case 2:
+                //         navigate("/user-dashboard");
+                //         break;
+                //     default:
+                //         navigate("/");
+                //         break;
+                // }
+
+                /*  or using If else */
+                if (role === 1) {
+                    navigate("/admin-dashboard");
+                } else if (role === 2) {
+                    navigate("/user-dashboard");
+                } else {
+                    navigate("/");
+                }
+
+
                 setSuccessMessage("");
             }, 2000);
 
@@ -127,9 +167,10 @@ function Login() {
             setErrorMessage(error.response?.data?.msg || 'Login failed');
             setTimeout(() => {
                 setErrorMessage('');
-            }, 1000)
+            }, 1000);
         }
     };
+
 
 
     return (
