@@ -51,8 +51,7 @@ function Register() {
                 <p className='fw-bold h1 text-center py-2'>Sign Up</p>
                 <div className='card-body'>
                     <form onSubmit={handleSubmit}>
-                        {successMessage && <p className='text-success'>{successMessage}</p>}
-                        {errorMessage && <p className='text-danger'>{errorMessage}</p>}
+                       
                         <div className="mb-3">
                             <input
                                 type="text"
@@ -124,6 +123,10 @@ function Register() {
                                 <option value="2">User</option>
                                 <option value="3">Client</option>
                             </select>
+                        </div>
+                        <div className='text-center pt-2'>
+                            {successMessage && <p className='text-success'>{successMessage}</p>}
+                            {errorMessage && <p className='text-danger'>{errorMessage}</p>}
                         </div>
                         <div className='mt-3 text-center mb-auto'>
                             <button type='submit' className='btn btn-info signinBtn'>Signup</button>

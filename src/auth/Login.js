@@ -34,7 +34,10 @@ function Login() {
                 setErrorMessage('Session expired. Please log in again.');
                 localStorage.removeItem('token');
                 localStorage.removeItem('loginForm');
-                setTimeout(() => navigate('/'), 2000); // Redirect after 2 seconds
+                setTimeout(()=>{
+                    navigate('/')
+                    setErrorMessage('')
+                },1000)
             } else {
                 // Handle other errors if needed
                 setErrorMessage('An error occurred. Please try again.');
@@ -68,111 +71,159 @@ function Login() {
         setRememberMe(e.target.checked);
     };
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+
+    //     try {
+    //         const apiUrl = "http://localhost:4000/auth/login";
+    //         const response = await axios.post(apiUrl, loginForm);
+    //         const { token } = response.data;
+
+    //         setSuccessMessage("Successfully logged in");
+    //         setLoginForm(clearForm);
+    //         if (rememberMe) {
+    //             localStorage.setItem('loginForm', JSON.stringify(loginForm));
+    //             localStorage.setItem('token', token); 
+    //         } else {
+    //             localStorage.removeItem('loginForm');
+    //             localStorage.setItem('token', token); 
+    //         }
+    //         setTimeout(() => {
+    //             navigate("/dashboard");
+    //             setSuccessMessage("");
+    //         }, 2000);
+
+    //         console.log(response.data); // example usage
+
+    //     } catch (error) {
+    //         setErrorMessage(error.response?.data?.msg || 'Login failed');
+    //     }
+    // };
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
             const apiUrl = "http://localhost:4000/auth/login";
             const response = await axios.post(apiUrl, loginForm);
-            const { token } = response.data;
+            const { token, name } = response.data;
 
-            setSuccessMessage("Successfully logged in");
+            setSuccessMessage("Login Successfully");
             setLoginForm(clearForm);
             if (rememberMe) {
                 localStorage.setItem('loginForm', JSON.stringify(loginForm));
                 localStorage.setItem('token', token); // Save the token as well
+                localStorage.setItem('name', name); // Save the user's name
             } else {
                 localStorage.removeItem('loginForm');
                 localStorage.setItem('token', token); // Save the token if not remembered
+                localStorage.setItem('name', name); // Save the user's name
             }
             setTimeout(() => {
                 navigate("/dashboard");
+                setSuccessMessage("");
             }, 2000);
-
-            console.log(response.data); // example usage
 
         } catch (error) {
             setErrorMessage(error.response?.data?.msg || 'Login failed');
+            setTimeout(() => {
+                setErrorMessage('');
+            }, 1000)
         }
     };
 
-    return (
-        <div className='container d-flex align-items-center justify-content-center min-vh-100'>
-            <div className='card signIn'>
-                <p className='fw-bold h1 text-center py-4'>Sign In</p>
-                <div className='card-body p-0'>
-                    <form onSubmit={handleSubmit}>
-                        <div className="input-container mb-3">
-                            <input
-                                className="input-text"
-                                type="email"
-                                id="email"
-                                name="email"
-                                value={loginForm.email}
-                                onChange={inputsHandler}
-                                placeholder=" "
-                                required
-                            />
-                            <label className="input-label" htmlFor="email">Email</label>
-                        </div>
 
-                        <div className="input-container mb-3">
-                            <input
-                                className="input-text"
-                                type={showPassword ? 'text' : 'password'}
-                                id="password"
-                                name="password"
-                                value={loginForm.password}
-                                onChange={inputsHandler}
-                                placeholder=" "
-                                required
-                            />
-                            <label className="input-label" htmlFor="password">Password</label>
-                            <div className="eye-icon pb-2" onClick={togglePasswordVisibility}>
-                                {showPassword ? <FaEye /> : <FaEyeSlash />}
+    return (
+        <>
+            <div className='container-fluid backBg px-0'>
+                <div className='background-design row mx-0'>
+                    <div className='container col d-flex align-items-center justify-content-center min-vh-100'>
+                        <div className='card signIn'>
+                            <p className='fw-bold h1 text-center py-4'>Sign In</p>
+                            <div className='card-body p-0'>
+                                <form onSubmit={handleSubmit}>
+                                    <div className="input-container mb-3">
+                                        <input
+                                            className="input-text"
+                                            type="email"
+                                            id="email"
+                                            name="email"
+                                            value={loginForm.email}
+                                            onChange={inputsHandler}
+                                            placeholder=" "
+                                            required
+                                        />
+                                        <label className="input-label" htmlFor="email">Username</label>
+                                    </div>
+
+                                    <div className="input-container mb-3">
+                                        <input
+                                            className="input-text"
+                                            type={showPassword ? 'text' : 'password'}
+                                            id="password"
+                                            name="password"
+                                            value={loginForm.password}
+                                            onChange={inputsHandler}
+                                            placeholder=" "
+                                            required
+                                        />
+                                        <label className="input-label" htmlFor="password">Password</label>
+                                        <div className="eye-icon pb-2" onClick={togglePasswordVisibility}>
+                                            {showPassword ? <FaEye /> : <FaEyeSlash />}
+                                        </div>
+                                    </div>
+
+                                    <div className="input-container">
+                                        <select
+                                            className="input-text"
+                                            id="role"
+                                            name="role"
+                                            value={loginForm.role}
+                                            onChange={inputsHandler}
+                                            placeholder=" "
+                                            required
+                                        >
+                                            <option value="">Select role</option>
+                                            <option value="1">Admin</option>
+                                            <option value="2">User</option>
+                                            <option value="3">Client</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-check d-flex">
+                                        <input
+                                            className="form-check-input border border-secondary"
+                                            type="checkbox"
+                                            id="rememberMe"
+                                            checked={rememberMe}
+                                            onChange={handleRememberMeChange}
+                                        />
+                                        <label className='ps-1' htmlFor="rememberMe">
+                                            Remember me
+                                        </label>
+                                        <p className='text-end ms-auto'>Forgot password?</p>
+                                    </div>
+                                    <div className='d-flex justify-content-center'>
+                                        {successMessage && <p className='text-success mb-0'>{successMessage}</p>}
+                                        {errorMessage && <p className='text-danger mb-0'>{errorMessage}</p>}
+                                    </div>
+
+                                    <div className='mt-3 text-center mb-auto'>
+                                        <button type='submit' className='btn btn-info signinBtn'>Login</button>
+                                    </div>
+                                </form>
+                                <p className="text-center mt-3 small">Click here to <Link to='/register'>register</Link> if you don't have an account.</p>
                             </div>
                         </div>
 
-                        <div className="input-container">
-                            <select
-                                className="input-text"
-                                id="role"
-                                name="role"
-                                value={loginForm.role}
-                                onChange={inputsHandler}
-                                placeholder=" "
-                                required
-                            >
-                                <option value="">Select role</option>
-                                <option value="1">Admin</option>
-                                <option value="2">User</option>
-                                <option value="3">Client</option>
-                            </select>
+                    </div>
+                    <div className='col d-none d-sm-block'>
+                        <img src="./images/logo3.png" alt="" />
+                        <div>
+                            <img src="./images/l.png" alt="" />
                         </div>
-                        <div className="form-check d-flex">
-                            <input
-                                className="form-check-input border border-secondary"
-                                type="checkbox"
-                                id="rememberMe"
-                                checked={rememberMe}
-                                onChange={handleRememberMeChange}
-                            />
-                            <label className='ps-1' htmlFor="rememberMe">
-                                Remember me
-                            </label>
-                            <p className='text-end ms-auto'>Forgot password?</p>
-                        </div>
-
-                        {successMessage && <p className='text-success'>{successMessage}</p>}
-                        {errorMessage && <p className='text-danger'>{errorMessage}</p>}
-                        <div className='mt-3 text-center mb-auto'>
-                            <button type='submit' className='btn btn-info signinBtn'>Login</button>
-                        </div>
-                    </form>
-                    <p className="text-center mt-3 small">Click here to <Link to='/register'>register</Link> if you don't have an account.</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 

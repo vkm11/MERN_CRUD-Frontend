@@ -103,3 +103,6 @@ ul li a:hover {
 .min-vh-78{
   min-height: 78vh;
 }
+.navbar-brand img{
+  filter: brightness(2.5);
+}

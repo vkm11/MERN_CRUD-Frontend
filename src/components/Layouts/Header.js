@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
-import { NavLink, Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { NavLink, Link, useNavigate } from 'react-router-dom'
 import '../../index.css';
+import Swal from 'sweetalert2';
 function Header() {
     const navBg = {
-        background: 'linear-gradient(58deg, #5d203d36, #2a228e)'
+        background: 'linear-gradient(#42266d, rgb(85 88 171))',
     }
     // const navbarIcon ={
     //     backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E\")",
@@ -11,6 +12,7 @@ function Header() {
 
 
     const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+    const [name, setName] = useState('');
 
     const handleNavbarToggle = () => {
         setIsNavbarOpen(!isNavbarOpen);
@@ -24,6 +26,51 @@ function Header() {
 
 
 
+    
+
+    useEffect(() => {
+        const storedName = localStorage.getItem('name');
+        if (storedName) {
+            setName(storedName);
+        }
+    }, []);
+
+    const navigate = useNavigate();
+    // const handleLogout = () => {
+    //     localStorage.removeItem('token');
+    //     localStorage.removeItem('loginForm');
+    //     localStorage.removeItem('name');
+    //     navigate('/');
+    //     alert('Logout successfully');
+    // };
+ 
+    const handleLogout = async () => {
+        // Show confirmation dialog
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "You want to logout?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, logout!',
+            cancelButtonText: 'No, cancel!'
+        });
+
+        if (result.isConfirmed) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('loginForm');
+            localStorage.removeItem('name');
+
+            navigate('/');
+
+            Swal.fire(
+                "Logged Out",
+                "You have been logged out successfully.",
+                'success'
+            );
+        }
+    };
 
 
     return (
@@ -53,20 +100,6 @@ function Header() {
                             <li className="nav-item">
                                 <NavLink to='/dashboard' className="nav-link text-light py-1">Home</NavLink>
                             </li>
-                            {/* <div className="dropdown nav-item">
-                                <a className="btn nav-link text-light dropdown-toggle py-1"  role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                   Masters
-                                </a>
-
-                                <ul className="dropdown-menu">
-                                    <li className="">
-                                        <NavLink to='/create-student' className="text-decoration-none py-1 px-2" aria-current="page" >Student</NavLink>
-                                    </li>
-                                    <li className="">
-                                        <NavLink to='/create-school' className="text-decoration-none py-1 px-2" aria-current="page" >School</NavLink>
-                                    </li>
-                                </ul>
-                            </div> */}
                             <div className="dropdown nav-item">
                                 <button className="btn nav-link text-light dropdown-toggle py-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                     Masters
@@ -107,15 +140,17 @@ function Header() {
                             </div>
 
                             
-                            {/* <li className="nav-item">
-                                <NavLink to='/register' className="nav-link text-light" >SignUp</NavLink>
-                            </li> */}
-                            <li className="nav-item">
-                                <NavLink to='/' className="nav-link text-light py-1" >SignIn</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink to='/signin' className="nav-link text-light py-1" >Logout</NavLink>
-                            </li>
+                            <div className="dropdown nav-item">
+                                <button className="btn nav-link text-light dropdown-toggle py-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {'welcome, ' + name}
+                                </button>
+
+                                <ul className="dropdown-menu py-0">
+                                    <li>
+                                        <button type="button" onClick={handleLogout} className="dropdown-item py-1 px-2" aria-current="page">Logout</button>
+                                    </li>
+                                </ul>
+                            </div>
                         </ul>
                     </div>
                 </div>
