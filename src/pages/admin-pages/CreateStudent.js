@@ -105,7 +105,7 @@ function CreateStudent() {
         if (validateForm()) {
             if (!selectedStudent) {
                 axios
-                    .post("http://localhost:4000/students/create-student", userForm)
+                    .post(`${process.env.REACT_APP_API}/students/create-student`, userForm)
                     .then((res) => {
                         console.log(res.data);
                         setSuccessMessage(res.data.message);
@@ -126,7 +126,7 @@ function CreateStudent() {
                     });
             } else {
                 axios
-                    .put(`http://localhost:4000/students/update-student/${selectedStudent._id}`, userForm)
+                    .put(`${process.env.REACT_APP_API}/students/update-student/${selectedStudent._id}`, userForm)
                     .then((res) => {
                         console.log(res.data);
                         setSuccessMessage("Student successfully updated");
@@ -153,7 +153,7 @@ function CreateStudent() {
 
     const deleteStudent = (_id) => {
         axios
-            .delete("http://localhost:4000/students/delete-student/" + _id)
+            .delete(`${process.env.REACT_APP_API}/students/delete-student/` + _id)
             .then(() => {
                 console.log("Data successfully deleted!");
                 setSuccessMessage("Student successfully deleted");
@@ -169,7 +169,7 @@ function CreateStudent() {
 
     const getStudent = () => {
         axios
-            .get("http://localhost:4000/students/")
+            .get(`${process.env.REACT_APP_API}/students/`)
             .then((res) => {
                 setUsergetForm(res.data.data);
                 setSearchResult(res.data.data);
