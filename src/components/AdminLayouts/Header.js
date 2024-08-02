@@ -145,12 +145,13 @@ function Header() {
                                     {'welcome, ' + name}
                                 </button>
 
-                                <ul className="dropdown-menu py-0">
+                                <ul className="dropdown-menu dropdown-menu-end py-0" aria-labelledby="dropdownMenuButton">
                                     <li>
                                         <button type="button" onClick={handleLogout} className="dropdown-item py-1 px-2" aria-current="page">Logout</button>
                                     </li>
                                 </ul>
                             </div>
+
                         </ul>
                     </div>
                 </div>
