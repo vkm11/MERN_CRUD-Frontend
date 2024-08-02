@@ -178,8 +178,10 @@ function Login() {
             <div className='container-fluid backBg px-0'>
                 <div className='background-design row mx-0'>
                     <div className='container col d-flex align-items-center justify-content-center min-vh-100'>
+                       
                         <div className='card signIn'>
-                            <p className='fw-bold h1 text-center py-4'>Sign In</p>
+                            <p className='fw-bold h1 text-center pt-4 mb-0'>Sign In</p>
+                            <p className='mb-0 pt-2 pb-4 small text-center'>Please enter your username and password!</p>
                             <div className='card-body p-0'>
                                 <form onSubmit={handleSubmit}>
                                     <div className="input-container mb-3">

@@ -14,7 +14,8 @@ function Users() {
         info: "",
         uname: "",
         password: '',
-        status: "1"
+        status: "1",
+        role: ""
     });
     const [usergetForm, setUsergetForm] = useState([]);
     const [isChecked, setIsChecked] = useState(true);
@@ -81,7 +82,8 @@ function Users() {
             info: "",
             uname: "",
             password: "",
-            status: ""
+            status: "",
+            role: "",
         });
     };
 
@@ -100,7 +102,8 @@ function Users() {
             info: "",
             uname: "",
             password: "",
-            status: ""
+            status: "",
+            role: ""
         });
     };
 
@@ -144,7 +147,8 @@ function Users() {
         let isValid = true;
         const newErrors = {};
 
-        if (!userForm.name || !userForm.name.trim()) {
+        // Validate name
+        if (!userForm.name || typeof userForm.name !== 'string' || userForm.name.trim() === '') {
             newErrors.name = "Name is required";
             isValid = false;
         } else if (!/^[A-Z]/.test(userForm.name.trim())) {
@@ -152,49 +156,63 @@ function Users() {
             isValid = false;
         }
 
-        if (!userForm.email.trim()) {
+        // Validate email
+        if (!userForm.email || typeof userForm.email !== 'string' || userForm.email.trim() === '') {
             newErrors.email = "Email is required";
             isValid = false;
-        } else if (!/\S+@\S+\.\S+/.test(userForm.email)) {
+        } else if (!/\S+@\S+\.\S+/.test(userForm.email.trim())) {
             newErrors.email = "Please enter a valid email address";
             isValid = false;
         }
 
-        if (typeof userForm.mob === 'string' && !userForm.mob.trim()) {
+        // Validate mobile number
+        // Convert mobile number to string if it's a number
+        const mobString = userForm.mob != null ? userForm.mob.toString().trim() : '';
+
+        if (!mobString || mobString === '') {
             newErrors.mob = "Mobile number is required";
             isValid = false;
-        } else if (isNaN(userForm.mob)) {
-            newErrors.mob = "Please enter a valid mobile number";
+        } else if (!/^\d+$/.test(mobString)) {
+            newErrors.mob = "Please enter a valid mobile number (digits only)";
             isValid = false;
-        } else if (userForm.mob.length < 9 || userForm.mob.length > 10) {
+        } else if (mobString.length < 9 || mobString.length > 10) {
             newErrors.mob = "Mobile number must be between 9 and 10 digits";
             isValid = false;
         }
 
-
-        if (!userForm.caddress.trim()) {
+        // Validate current address
+        if (!userForm.caddress || typeof userForm.caddress !== 'string' || userForm.caddress.trim() === '') {
             newErrors.caddress = "Current address is required";
             isValid = false;
         }
-        if (!userForm.paddress.trim()) {
+
+        // Validate permanent address
+        if (!userForm.paddress || typeof userForm.paddress !== 'string' || userForm.paddress.trim() === '') {
             newErrors.paddress = "Permanent address is required";
             isValid = false;
         }
 
-        if (!userForm.info.trim()) {
+        // Validate information
+        if (!userForm.info || typeof userForm.info !== 'string' || userForm.info.trim() === '') {
             newErrors.info = "Information is required";
             isValid = false;
         }
-        if (!userForm.password.trim()) {
+
+        // Validate password
+        if (!userForm.password || typeof userForm.password !== 'string' || userForm.password.trim() === '') {
             newErrors.password = "Password is required";
             isValid = false;
         }
-
-
+        const roleValue = parseInt(userForm.role, 10);
+        if (isNaN(roleValue) || roleValue <= 0) {
+            newErrors.role = "Role is required and must be a valid number";
+            isValid = false;
+        }
 
         setErrors(newErrors);
         return isValid;
     };
+
 
     const addUser = (e) => {
         e.preventDefault();
@@ -215,7 +233,8 @@ function Users() {
                             info: "",
                             uname: "",
                             password: "",
-                            status: ''
+                            status: '',
+                            role: ''
                         });
                         setTimeout(() => {
                             getUserData();
@@ -242,7 +261,8 @@ function Users() {
                             info: "",
                             uname: "",
                             password: "",
-                            status: ''
+                            status: '',
+                            role: '',
                         });
                         setSelectedUser(null);
                         setErrors({});
@@ -289,7 +309,8 @@ function Users() {
             info: selected.info,
             uname: selected.uname,
             password: selected.password,
-            status: selected.status
+            status: selected.status,
+            role: selected.role
         });
         setIsChecked(isChecked);
     };
@@ -399,7 +420,7 @@ function Users() {
                                             type="text"
                                             className="form-control"
                                             name="name"
-                                            value={userForm.name}
+                                            value={userForm.name || ''}
                                             onChange={inputsHandler}
                                         />
                                         {errors.name && (
@@ -412,7 +433,7 @@ function Users() {
                                             type="text"
                                             className="form-control"
                                             name="mob"
-                                            value={userForm.mob}
+                                            value={userForm.mob || ''}
                                             onChange={inputsHandler}
                                             maxLength="10"
                                         />
@@ -425,7 +446,7 @@ function Users() {
                                         <label className='form-label my-0'>Current address</label><span className="text-danger">*</span>
                                         <textarea className='form-control'
                                             type="text"
-                                            value={userForm.caddress}
+                                            value={userForm.caddress || ''}
                                             onChange={handleCaddressChange}
                                         />
                                         {errors.caddress && (
@@ -448,7 +469,7 @@ function Users() {
                                         </div>
                                         <textarea className='form-control'
                                             type="text"
-                                            value={userForm.paddress}
+                                            value={userForm.paddress || ''}
                                             onChange={handlePaddressChange}
                                             disabled={isChecked}
                                         />
@@ -475,11 +496,31 @@ function Users() {
                                             type="text"
                                             className="form-control"
                                             name="info"
-                                            value={userForm.info}
+                                            value={userForm.info || ''}
                                             onChange={inputsHandler}
                                         />
                                         {errors.info && (
                                             <div className="text-danger">{errors.info}</div>
+                                        )}
+                                    </div>
+                                    <div className="col-sm-3 ">
+                                        <label className="form-label my-0">Select Role</label><span className="text-danger">*</span>
+                                        
+                                        <select
+                                            className="form-control"
+                                            id="role"
+                                            name="role"
+                                            value={userForm.role || ''}
+                                            onChange={inputsHandler}
+                                            required
+                                        >
+                                            <option value="" disabled>Select Role</option>
+                                            <option value="1">Admin</option>
+                                            <option value="2">User</option>
+                                        </select>
+
+                                        {errors.role && (
+                                            <div className="text-danger">{errors.role}</div>
                                         )}
                                     </div>
                                     {isVisibleStatus && (<div className="col-sm-4">
