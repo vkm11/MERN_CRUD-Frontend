@@ -155,11 +155,11 @@ function UserDashboard() {
                 </div>
               </div>
             </div>
-            <button className="carousel-control-prev" style={{ opacity: '0' }} type="button" data-bs-target="#homeDivFirst" data-bs-slide="prev">
+            <button className="carousel-control-prev" style={{ opacity: '0', height: 'fit-content', top: '50%' }} type="button" data-bs-target="#homeDivFirst" data-bs-slide="prev">
               <span className="carousel-control-prev-icon" aria-hidden="true" />
               <span className="visually-hidden">Previous</span>
             </button>
-            <button className="carousel-control-next" style={{ opacity: '0' }} type="button" data-bs-target="#homeDivFirst" data-bs-slide="next">
+            <button className="carousel-control-next" style={{ opacity: '0', height: 'fit-content', top: '50%' }} type="button" data-bs-target="#homeDivFirst" data-bs-slide="next">
               <span className="carousel-control-next-icon" aria-hidden="true" />
               <span className="visually-hidden">Next</span>
             </button>

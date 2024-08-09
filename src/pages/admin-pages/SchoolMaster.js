@@ -128,7 +128,7 @@ function CreateSchool() {
 
             if (!selectedSchool) {
                 axios
-                    .post("http://localhost:4000/school/create-school", userForm)
+                    .post(`${process.env.REACT_APP_API}/school/create-school`, userForm)
                     .then((res) => {
                         console.log(res.data);
                         setSuccessMsg(res.data.message)
@@ -159,11 +159,11 @@ function CreateSchool() {
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, update it!',
                     cancelButtonText: 'No, cancel!'
-               
+
             }).then((result) => {
                 if (result.isConfirmed) {
                 axios
-                    .put(`http://localhost:4000/school/update-school/${selectedSchool._id}`, userForm)
+                    .put(`${process.env.REACT_APP_API}/school/update-school/${selectedSchool._id}`, userForm)
                     .then((res) => {
                         console.log(res.data);
                         setSuccessMsg(res.data.msg)
@@ -226,7 +226,7 @@ function CreateSchool() {
         }).then((result) => {
             if (result.isConfirmed) {
                 axios
-                    .delete("http://localhost:4000/school/delete-school/" + _id)
+                    .delete(`${process.env.REACT_APP_API}/school/delete-school/` + _id)
                     .then((res) => {
                         console.log("Data successfully deleted!");
                         setSuccessMsg(res.data.msg);
@@ -253,7 +253,7 @@ function CreateSchool() {
     };
     const getSchoolData = () => {
         axios
-            .get("http://localhost:4000/school/")
+            .get(`${process.env.REACT_APP_API}/school/`)
             .then((res) => {
                 setUsergetForm(res.data.data);
                 setSearchResult(res.data.data);

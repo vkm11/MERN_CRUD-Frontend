@@ -91,11 +91,11 @@ function Roles() {
             console.log(roleForm)
             if (!selectedRole) {
                 axios
-                    .post("http://localhost:4000/role/create-role", roleForm)
+                    .post(`${process.env.REACT_APP_API}/role/create-role`, roleForm)
                     .then((res) => {
                         console.log(res.data);
                         setSuccessMsg(res.data.message)
-                       
+
                         setRoleForm({
                             name: "",
                             description: "",
@@ -111,12 +111,12 @@ function Roles() {
                         console.error("Error:", error);
                         // Handle error and display appropriate message to the user
                     });
-                
+
 
             } else {
                 if (window.confirm("Are you sure you want to update this role?")) {
                 axios
-                    .put(`http://localhost:4000/role/update-role/${selectedRole._id}`, roleForm)
+                    .put(`${process.env.REACT_APP_API}/role/update-role/${selectedRole._id}`, roleForm)
                     .then((res) => {
                         console.log(res.data);
                         setSuccessMsg(res.data.msg)
@@ -144,7 +144,7 @@ function Roles() {
     };
     const getData = (e) => {
         axios
-            .get("http://localhost:4000/role/")
+            .get(`${process.env.REACT_APP_API}/role/`)
             .then((res) => {
                 setRolegetForm(res.data.data);
                 setSearchResult(res.data.data);
@@ -216,14 +216,14 @@ function Roles() {
     const deleteRole = (_id) => {
         if (window.confirm("Are you sure you want to delete this role"))
         axios
-            .delete("http://localhost:4000/role/delete-role/" + _id)
+            .delete(`${process.env.REACT_APP_API}/role/delete-role/` + _id)
             .then((res) => {
                 console.log("Data successfully deleted!");
                 setSuccessMsg(res.data.msg);
 
                 // After deletion, fetch updated data
                 axios
-                    .get("http://localhost:4000/role/")
+                    .get(`${process.env.REACT_APP_API}/role/`)
                     .then((res) => {
                         setRolegetForm(res.data.data);
                         setSearchResult(res.data.data);

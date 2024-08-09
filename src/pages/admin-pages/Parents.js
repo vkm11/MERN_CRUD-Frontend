@@ -196,7 +196,7 @@ function Parents() {
         } else {
             if (window.confirm("Are you sure you want to update this Parent?")) {
                 axios
-                    .put(`${ process.env.REACT_APP_API }/parent/update-parent/${selectedParent._id}`, parentForm)
+                    .put(`${process.env.REACT_APP_API}/parent/update-parent/${selectedParent._id}`, parentForm)
                     .then((res) => {
                         console.log(res.data);
                         setSuccessMsg(res.data.msg);

@@ -19,8 +19,9 @@ function Header() {
       setName(username);
     }
   }, []);
-  const handleLogout = async () => {
+  const handleLogout = async (event) => {
     // Show confirmation dialog
+    event.preventDefault();
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "You want to logout?",
@@ -29,7 +30,8 @@ function Header() {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, logout!',
-      cancelButtonText: 'No, cancel!'
+      cancelButtonText: 'No, cancel!',
+      allowOutsideClick: false
     });
 
     if (result.isConfirmed) {
@@ -121,8 +123,8 @@ function Header() {
                   </button>
 
                   <ul className="dropdown-menu dropdown-menu-end py-0" aria-labelledby="dropdownMenuButton">
-                    <li onClick={handleLogout}>
-                      <NavLink className="dropdown-item py-1 px-2"  aria-current="page">Logout</NavLink>
+                    <li >
+                      <NavLink className="dropdown-item py-1 px-2" onClick={handleLogout} aria-current="page">Logout</NavLink>
                     </li>
                   </ul>
                 </div>
