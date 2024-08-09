@@ -5,6 +5,8 @@ import Swal from 'sweetalert2';
 function Header() {
     const navBg = {
         background: 'linear-gradient(#42266d, rgb(85 88 171))',
+        zIndex: 1,
+        position: "relative"
     }
     // const navbarIcon ={
     //     backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E\")",
@@ -31,7 +33,8 @@ function Header() {
     useEffect(() => {
         const storedName = localStorage.getItem('name');
         if (storedName) {
-            setName(storedName);
+            const adminName = storedName.split(' ')[0]
+            setName(adminName);
         }
     }, []);
 
@@ -77,7 +80,7 @@ function Header() {
         <>
             <nav className="navbar navbar-expand-lg" style={navBg}>
                 <div className="container-fluid">
-                    <Link to='/' className="navbar-brand text-white py-0"> <img src="./images/logo3.png" alt='' width="150px" height="50px" /></Link>
+                    <Link to='/admin-dashboard' className="navbar-brand text-white py-0"> <img src="./images/logo3.png" alt='' width="150px" height="50px" /></Link>
 
                     {/* <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon" style={navbarIcon}></span>
@@ -142,12 +145,11 @@ function Header() {
                             
                             <div className="dropdown nav-item">
                                 <button className="btn nav-link text-light dropdown-toggle py-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {'welcome, ' + name}
+                                    {name}
                                 </button>
-
                                 <ul className="dropdown-menu dropdown-menu-end py-0" aria-labelledby="dropdownMenuButton">
                                     <li>
-                                        <button type="button" onClick={handleLogout} className="dropdown-item py-1 px-2" aria-current="page">Logout</button>
+                                        <NavLink className="dropdown-item py-1 px-2" onClick={handleLogout} aria-current="page">Logout</NavLink>
                                     </li>
                                 </ul>
                             </div>

@@ -3,7 +3,7 @@ ul li a {
   width: fit-content;
 }
 
-ul li a:hover {
+.nav-item .nav-link:hover {
   border-bottom: 1px solid red;
   -ms-transform: scale(1.1);
   -webkit-transform: scale(1.1);
@@ -11,6 +11,8 @@ ul li a:hover {
 }
 .dropdown-menu .dropdown-item {
   border-radius: 5px;
+  z-index: 1050;
+  position: relative;
 }
 .dropdown-menu .dropdown-item:hover {
   border-bottom: 1px solid red;
@@ -79,30 +81,216 @@ ul li a:hover {
   width: 100%;
 }
 
-.signIn {
-  width: 400px;
-  padding: 20px;
-  background: linear-gradient(#fcf4f4, #efe6e6);
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  min-height: 400px;
-}
-.signinBtn {
-  background: linear-gradient(#0a52da, #2e3f5e);
-  transition: transform 0.3s ease-out;
-  width: 100%;
-  color: #ffffff !important;
-}
 
-.signinBtn:active {
-  background: linear-gradient(#07098b, #5c1596);
-  transform: scale(0.9);
-  color: #ffffff;
-  width: 100%;
-}
 .min-vh-78{
   min-height: 78vh;
 }
 .navbar-brand img{
   filter: brightness(2.5);
 }
+.about p{
+  text-align: justify;
+}
+
+
+
+
+
+
+
+  /* Custom Scrollbars for WebKit-based browsers */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    /* Firefox scrollbar styling */
+    /* html {
+      scrollbar-width: thin;
+      scrollbar-color: #888 #f1f1f1;
+    } */
+
+    /* Edge and IE scrollbar styling */
+    ::-ms-scrollbar {
+      width: 12px;
+    }
+
+    ::-ms-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-ms-scrollbar-thumb {
+      background: #888;
+      border-radius: 6px;
+    }
+
+    ::-ms-scrollbar-thumb:hover {
+      background: #555;
+    }
+ ::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(rgb(124, 103, 60));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient( rgb(255, 136, 0), rgb(255, 60, 0));
+}
+
+
+
+
+/* Footer start */
+
+ul {
+    margin: 0px;
+    padding: 0px;
+}
+.footer-section {
+  background: #151414;
+  position: relative;
+}
+.footer-content {
+  position: relative;
+  z-index: 2;
+}
+.footer-pattern img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 330px;
+  background-size: cover;
+  background-position: 100% 100%;
+}
+.footer-logo {
+  margin-bottom: 30px;
+}
+.footer-logo img {
+    max-width: 200px;
+}
+.footer-text p {
+  margin-bottom: 14px;
+  font-size: 14px;
+      color: #7e7e7e;
+  line-height: 28px;
+}
+.footer-social-icon span {
+  color: #fff;
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 20px;
+}
+.footer-social-icon a {
+  color: #fff;
+  font-size: 16px;
+  margin-right: 15px;
+}
+.footer-social-icon i {
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  line-height: 38px;
+  border-radius: 50%;
+}
+.facebook-bg{
+  background: #3B5998;
+}
+.twitter-bg{
+  background: #55ACEE;
+}
+.google-bg{
+  background: #DD4B39;
+}
+.footer-widget-heading h3 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 40px;
+  position: relative;
+}
+.footer-widget-heading h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -15px;
+  height: 2px;
+  width: 50px;
+  background: #ff5e14;
+}
+.footer-widget ul li {
+  display: inline-block;
+  float: left;
+  width: 50%;
+  margin-bottom: 12px;
+}
+.footer-widget ul li a:hover{
+  color: #ff5e14;
+}
+.footer-widget ul li a {
+  color: #878787;
+  text-transform: capitalize;
+}
+.subscribe-form {
+  position: relative;
+  overflow: hidden;
+}
+.subscribe-form input {
+  width: 100%;
+  padding: 14px 28px;
+  background: #2E2E2E;
+  border: 1px solid #2E2E2E;
+  color: #fff;
+}
+.subscribe-form button {
+    position: absolute;
+    right: 0;
+    background: #ff5e14;
+    padding: 13px 20px;
+    border: 1px solid #ff5e14;
+    top: 0;
+}
+.subscribe-form button i {
+  color: #fff;
+  font-size: 22px;
+  transform: rotate(-6deg);
+}
+.copyright-area{
+  background: #202020;
+  padding: 25px 0;
+}
+.copyright-text p {
+  margin: 0;
+  font-size: 14px;
+  color: #878787;
+}
+.copyright-text p a{
+  color: #ff5e14;
+}
+.footer-menu li {
+  display: inline-block;
+  margin-left: 20px;
+}
+.footer-menu li:hover a{
+  color: #ff5e14;
+}
+.footer-menu li a {
+  font-size: 14px;
+  color: #878787;
+}
+/* Footer end */

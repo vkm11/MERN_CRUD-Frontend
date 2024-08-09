@@ -14,7 +14,8 @@ import Login from "./auth/Login";
 import Register from "./auth/Register";
 
 // user 
-import UserDashboard from './pages/user-pages/UserDashboard'
+import UserDashboard from './pages/user-pages/UserDashboard';
+import Aboutus from './pages/user-pages/Aboutus'
 function App() {
   
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route exact path="/teacher" element={<Teacher />} />
 
             <Route exact path="/user-dashboard" element={<UserDashboard />} />
+            <Route exact path="/aboutus" element={<Aboutus />} />
 
           </Routes>
         </div>

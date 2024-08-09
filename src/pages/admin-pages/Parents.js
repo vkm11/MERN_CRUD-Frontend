@@ -142,7 +142,7 @@ function Parents() {
 
     const getData = () => {
         axios
-            .get("http://localhost:4000/parent/")
+            .get(`${process.env.REACT_APP_API}/parent/`)
             .then((res) => {
                 setParentGet(res.data.data);
                 setSearchResult(res.data.data);
@@ -173,11 +173,11 @@ function Parents() {
 
         if (!selectedParent) {
             axios
-                .post("http://localhost:4000/parent/create-parent", parentForm)
+                .post(`${process.env.REACT_APP_API}/parent/create-parent`, parentForm)
                 .then((res) => {
                     console.log(res.data);
                     setSuccessMsg(res.data.message);
-               
+
                     setParentForm({
                         firstName: "",
                         nickName: "",
@@ -196,7 +196,7 @@ function Parents() {
         } else {
             if (window.confirm("Are you sure you want to update this Parent?")) {
                 axios
-                    .put(`http://localhost:4000/parent/update-parent/${selectedParent._id}`, parentForm)
+                    .put(`${ process.env.REACT_APP_API }/parent/update-parent/${selectedParent._id}`, parentForm)
                     .then((res) => {
                         console.log(res.data);
                         setSuccessMsg(res.data.msg);
@@ -260,7 +260,7 @@ function Parents() {
     const deleteParent = (_id) => {
         if (window.confirm("Are you sure you want to delete this Parent?"))
             axios
-                .delete(`http://localhost:4000/parent/delete-parent/${_id}`)
+                .delete(`${process.env.REACT_APP_API}/parent/delete-parent/${_id}`)
                 .then((res) => {
                     console.log("Data successfully deleted!");
                     setSuccessMsg(res.data.msg);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import { Link } from 'react-router-dom';
 function Register() {
     const clearForm = {
         name: "",
@@ -33,7 +33,7 @@ function Register() {
         e.preventDefault();
 
         try {
-            const apiUrl = "http://localhost:4000/auth/register";
+            const apiUrl = `${process.env.REACT_APP_API}/auth/register`;
             await axios.post(apiUrl, signupForm);
             setSuccessMessage("Successfully Registered");
             setTimeout(() => {
@@ -121,7 +121,6 @@ function Register() {
                                 <option value="">Select Role</option>
                                 <option value="1">Admin</option>
                                 <option value="2">User</option>
-                                <option value="3">Client</option>
                             </select>
                         </div>
                         <div className='text-center pt-2'>
@@ -130,6 +129,9 @@ function Register() {
                         </div>
                         <div className='mt-3 text-center mb-auto'>
                             <button type='submit' className='btn btn-info signinBtn'>Signup</button>
+                        </div>
+                        <div className=''>
+                            <p className="text-center my-0 small py-0">Click here to <Link to='/'>login</Link> if you have already account.</p>
                         </div>
                     </form>
                 </div>
