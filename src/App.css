@@ -229,6 +229,7 @@
     position: relative;
     border-radius: 30% 70% 70% 30% / 30% 39% 61% 70%;
     z-index: 0;
+    animation: topToBottom 2s ease-in-out infinite;
   }
   .profileImage img {
     height: 308px !important;
@@ -263,6 +264,7 @@
     position: relative;
     border-radius: 30% 70% 70% 30% / 30% 39% 61% 70%;
     z-index: 0;
+    animation: topToBottom 2s ease-in-out infinite;
   }
   .profileImage img {
     height: 308px !important;
@@ -288,9 +290,22 @@
   position: relative;
   border-radius: 30% 70% 70% 30% / 30% 39% 61% 70%;
   z-index: 0;
+  animation: topToBottom 2s ease-in-out infinite;
 }
+
 .profileImage:hover {
   filter: drop-shadow(2px 4px 6px black);
+}
+@keyframes topToBottom {
+  0% {
+    transform: translateY(-10px); 
+  }
+  50% {
+    transform: translateY(10px); 
+  }
+  100% {
+    transform: translateY(-10px);
+  }
 }
 .main-heading {
   font-size: 2rem;
@@ -391,7 +406,19 @@
   line-height: 2.4;
   font-size: 1.2rem;
 }
+/* Carousel.css */
+.carousel-indicators button {
+  background-color: #000 !important; 
+  width: 12px !important; 
+  height: 12px !important; 
+  border-radius: 50%;
+  opacity: 0.5;
+}
 
+.carousel-indicators .active {
+  background-color: rgb(182, 12, 97) !important;
+  opacity: 1; 
+}
 /* landing-service */
 .owner {
   display: block;

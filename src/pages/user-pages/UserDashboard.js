@@ -263,10 +263,10 @@ function UserDashboard() {
           </div>
         </div>
         <div className='container-fluid px-0'>
-          <div className='py-3'>
-            <div className='clientmsg px-0 mx-0' >
+          <div className='py-0'>
+            <div className='clientmsg px-0 mx-0 pt-3'>
               <p className='text-center h3 fw-bold text-danger headingContent'>WHAT OUR CLIENTS SAY</p>
-              <div className='container mb-2' style={{ maxWidth: '1020px' }}>
+              <div className='container ' style={{ maxWidth: '1020px' }}>
                 <div id="clientMsg" className="carousel slide" data-bs-ride="carousel" >
                   <div className="carousel-indicators mb-0">
                     <button type="button" data-bs-target="#clientMsg" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>

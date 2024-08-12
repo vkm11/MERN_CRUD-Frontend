@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 function Header() {
   const navBg = {
-    background: 'linear-gradient(#42266d, rgb(85 88 171))',
+    background: 'linear-gradient(rgb(112 25 166), rgb(171 85 151))',
     filter: 'drop-shadow(-2px 4px 6px black)'
   }
 
@@ -74,7 +74,7 @@ function Header() {
                   <NavLink to='#' className="nav-link text-light py-1">iTWINE Advantages</NavLink>
                 </li>
                 <div className="dropdown nav-item px-2">
-                  <button className="btn nav-link text-light dropdown-toggle py-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                  <button className="btn nav-link text-light dropdown-toggle dropup py-1" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                     Solutions
                   </button>
 
